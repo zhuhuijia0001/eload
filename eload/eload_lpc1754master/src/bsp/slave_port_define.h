@@ -1,0 +1,31 @@
+
+#ifndef _SLAVE_PORT_DEFINE_H_
+#define _SLAVE_PORT_DEFINE_H_
+
+typedef enum
+{
+	SLAVE_PORT_0 = 0,
+	
+	SLAVE_PORT_1,
+	
+	SLAVE_PORT_2,
+	
+	SLAVE_PORT_3,
+	
+	SLAVE_PORT_4,
+	
+	SLAVE_PORT_5,
+	
+	SLAVE_PORT_6,
+	
+	SLAVE_PORT_7,
+
+	SLAVE_PORT_ALL,
+
+	SLAVE_PORT_COUNT = SLAVE_PORT_ALL,
+	
+	SLAVE_PORT_NONE
+} slave_com_port;
+
+#endif
+

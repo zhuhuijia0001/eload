@@ -1,0 +1,145 @@
+#ifndef _MENU_OP_H_
+#define _MENU_OP_H_
+
+/* menu message */
+typedef enum
+{
+	MSG_ID_INIT = 0,
+	
+	MSG_ID_DESTROY,
+	
+	MSG_ID_KEY,
+	
+	MSG_ID_REFRESH,
+
+	MSG_ID_SYNTH_TEST,
+	
+	MSG_ID_COUNT
+} MSG_ID;
+
+/* menus */
+typedef enum
+{
+	MENU_ID_WELCOME,
+	
+	MENU_ID_MAIN,
+
+	MENU_ID_CV_MODE,
+	MENU_ID_CC_MODE,
+	MENU_ID_CR_MODE,
+	
+	MENU_ID_SYNTH_TEST_SETTING,
+
+	MENU_ID_CHANNEL_SETTING,
+	
+	MENU_ID_SYNTH_TEST,
+	
+	MENU_ID_EMPTY_LOAD_SETTING,
+
+	MENU_ID_USB_DP_DN_DIVIDE_MODE_SETTING,
+	MENU_ID_USB_DP_DN_SHORT_MODE_SETTING,
+	MENU_ID_USB_DP_DN_RESIST_MODE_SETTING,
+	
+	MENU_ID_CC_SETTING,
+	MENU_ID_CV_SETTING,
+	MENU_ID_CR_SETTING,
+	
+	MENU_ID_OVER_CURRENT_SETTING,
+	MENU_ID_SHORT_SETTING,
+	MENU_ID_DISCHARGE_SETTING,
+	
+	MENU_ID_FACTORY_MODE,
+	MENU_ID_ADJUST,
+	MENU_ID_PRIVILEGE,
+	MENU_ID_LIFE,
+	MENU_ID_PHONE_SETTING,
+	
+	MENU_ID_COUNT,
+	MENU_ID_CURRENT,
+	
+	MENU_ID_NONE
+} MENU_ID;
+
+#define DEF_MENU_HANDLER(menu_id)               void menu_##menu_id##_handler(MSG_ID msg_id, void *msg)
+
+#define BEGIN_MENU_HANDLER(menu_id)             DEF_MENU_HANDLER(menu_id)  { switch (msg_id) {
+										
+#define IMPLEMENT_MSG_HANDLER(msg_id, handler)  case msg_id: handler(msg);  break;
+
+#define END_MENU_HANDLER()                      default: break; } }
+								
+/* menu functions */
+/* welcome */
+DEF_MENU_HANDLER(MENU_ID_WELCOME);
+
+/* main */
+DEF_MENU_HANDLER(MENU_ID_MAIN);
+
+/* cv mode */
+DEF_MENU_HANDLER(MENU_ID_CV_MODE);
+
+/* cc mode */
+DEF_MENU_HANDLER(MENU_ID_CC_MODE);
+
+/* cr mode */
+DEF_MENU_HANDLER(MENU_ID_CR_MODE);
+
+/* synth test setting */
+DEF_MENU_HANDLER(MENU_ID_SYNTH_TEST_SETTING);
+
+/* channel setting */
+DEF_MENU_HANDLER(MENU_ID_CHANNEL_SETTING);
+
+/* synth test */
+DEF_MENU_HANDLER(MENU_ID_SYNTH_TEST);
+
+/* empty load setting */
+DEF_MENU_HANDLER(MENU_ID_EMPTY_LOAD_SETTING);
+
+/* usb d+/d- divide mode */
+DEF_MENU_HANDLER(MENU_ID_USB_DP_DN_DIVIDE_MODE_SETTING);
+
+/* usb d+/d- short mode */
+DEF_MENU_HANDLER(MENU_ID_USB_DP_DN_SHORT_MODE_SETTING);
+
+/* usb d+/d- resist mode */
+DEF_MENU_HANDLER(MENU_ID_USB_DP_DN_RESIST_MODE_SETTING);
+
+/* cc setting */
+DEF_MENU_HANDLER(MENU_ID_CC_SETTING);
+
+/* cv setting */
+DEF_MENU_HANDLER(MENU_ID_CV_SETTING);
+
+/* cr setting */
+DEF_MENU_HANDLER(MENU_ID_CR_SETTING);
+
+/* over current setting */
+DEF_MENU_HANDLER(MENU_ID_OVER_CURRENT_SETTING);
+
+/* short setting */
+DEF_MENU_HANDLER(MENU_ID_SHORT_SETTING);
+
+/* discharge setting */
+DEF_MENU_HANDLER(MENU_ID_DISCHARGE_SETTING);
+
+/* channel set */
+DEF_MENU_HANDLER(MENU_ID_CHANNEL_SET);
+
+/* factory mode */
+DEF_MENU_HANDLER(MENU_ID_FACTORY_MODE);
+
+/* adjust */
+DEF_MENU_HANDLER(MENU_ID_ADJUST);
+
+/* privilege */
+DEF_MENU_HANDLER(MENU_ID_PRIVILEGE);
+
+/* life */
+DEF_MENU_HANDLER(MENU_ID_LIFE);
+
+/* phone setting */
+DEF_MENU_HANDLER(MENU_ID_PHONE_SETTING);
+
+#endif
+
