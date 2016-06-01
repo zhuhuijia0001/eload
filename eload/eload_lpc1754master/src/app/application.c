@@ -63,7 +63,7 @@
 /* determine whether it is allowed to enter factory mode */
 static bool can_enter_main_menu(void)
 {
-	return !(key_is_pressed(KEY_UP) /*&& key_is_pressed(KEY_DOWN)*/);
+	return !(key_is_pressed(KEY_UP) && key_is_pressed(KEY_DOWN));
 }
 
 static void check_power_on_limit(void)
