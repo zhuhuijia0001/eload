@@ -70,6 +70,9 @@ void rt_hw_board_init()
 	SCB->VTOR  = (0x00000000 & NVIC_VTOR_MASK);
 #endif
 
+	/* priority group */
+	NVIC_SetPriorityGrouping(2);
+	
 	/* initialize systick */
 	SysTick_Config( SystemCoreClock/RT_TICK_PER_SECOND);
 	/* set pend exception priority */

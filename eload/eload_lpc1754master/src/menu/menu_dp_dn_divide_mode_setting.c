@@ -382,6 +382,11 @@ static void key_handler(void *msg)
 	{
 		return;
 	}
+
+	if (KEY_TYPE(key_msg) != MASK_KEY_PRESS && (key == KEY_OK || key == KEY_CANCEL))
+	{
+		return;
+	}
 	
 	beeper_beep(BEEPER_VOL_LOW, 50, 50, 1);
 

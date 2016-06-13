@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 
+#include "app_cfg.h"
+
 #include "dev_beeper.h"
 
 #include "lpc17xx_pinsel.h"
@@ -185,9 +187,9 @@ static rt_err_t rt_beeper_init (rt_device_t dev)
 	
 	PWM_init(BEEPER_FREQ);
 	
-	tid = rt_thread_create("beeper", rt_beeper_entry, &s_dev_beeper, 
-							256, 17, 10);
+	tid = rt_thread_create("beeper", rt_beeper_entry, &s_dev_beeper, 256, BEEPER_THREAD_PRIORITY, 10);
 	RT_ASSERT(tid != RT_NULL);
+
 	rt_thread_startup(tid);
 	
 	return RT_EOK;
@@ -223,9 +225,7 @@ static rt_err_t rt_beeper_control(rt_device_t dev, rt_uint8_t cmd, void *args)
 	case CMD_BEEP_SET:
 		{
 			struct beep_property *property = (struct beep_property *)args;
-			RT_ASSERT(property != RT_NULL 
-						&& property->on_interval > 0
-						&& property->beep_count > 0);
+			RT_ASSERT(property != RT_NULL && property->on_interval > 0 && property->beep_count > 0);
 			
 			rt_mq_send(dev_beeper->message_queue, property, sizeof(*property));
 		}

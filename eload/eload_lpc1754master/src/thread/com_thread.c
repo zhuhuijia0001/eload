@@ -3,10 +3,11 @@
 #include "type.h"
 #include "packet.h"
 
+#include "app_cfg.h"
+
 #include "slave_com.h"
 
 #include "trace.h"
-
 
 #include "parameter.h"
 #include "global.h"
@@ -467,19 +468,17 @@ static void com_thread_entry(void *parameter)
 					|| poll_payload->test_type == TEST_TYPE_CR_TEST
 					|| poll_payload->test_type == TEST_TYPE_OVER_CURRENT_TEST
 					|| poll_payload->test_type == TEST_TYPE_SHORT_TEST
-					|| poll_payload->test_type == TEST_TYPE_DISCHARGE_TEST)
+					|| poll_payload->test_type == TEST_TYPE_DISCHARGE_TEST
+					|| poll_payload->test_type == TEST_TYPE_NONE)
 				{
-					if (cur_port == SLAVE_PORT_0)
-					{
-						test_content.channel    = cur_port;
-						test_content.test_type  = poll_payload->test_type;
-						test_content.test_status = poll_payload->test_status;
-						test_content.ac_current = poll_payload->ac;
-						test_content.voltage    = poll_payload->voltage;
-						test_content.current    = poll_payload->current;
+					test_content.channel    = cur_port;
+					test_content.test_type  = poll_payload->test_type;
+					test_content.test_status = poll_payload->test_status;
+					test_content.ac_current = poll_payload->ac;
+					test_content.voltage    = poll_payload->voltage;
+					test_content.current    = poll_payload->current;
 				
-						test_content_notify(&test_content);
-					}
+					test_content_notify(&test_content);
 				}
 			}
 			
@@ -552,9 +551,9 @@ void start_com_thread(void)
 	s_payload_queue = rt_mq_create("comqueue", MAX_RECV_PACKET_SIZE - (sizeof(PACKET) - 1), PKT_MSG_QUEUE_LEN, RT_IPC_FLAG_FIFO);
 	RT_ASSERT(s_payload_queue != RT_NULL);
 	
-	tid = rt_thread_create("com", com_thread_entry, RT_NULL, 512, 12, 10);
-
+	tid = rt_thread_create("com", com_thread_entry, RT_NULL, 512, COM_THREAD_PRIORITY, 10);
 	RT_ASSERT(tid != RT_NULL);
+
 	rt_thread_startup(tid);
 }
 

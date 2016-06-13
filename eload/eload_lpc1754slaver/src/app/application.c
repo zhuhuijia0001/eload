@@ -86,9 +86,169 @@ static void quick_charge_test(void)
 #else
 static void quick_charge_test(void)
 {
+#if 0
+	int32_t max_duty = control_get_max_duty();
 
+	/* 9V */
+	int32_t duty = (int32_t)(0.6 / 3.3 * max_duty);
+	control_set_dp_drive_duty(duty);
+	control_set_dn_drive_duty(0);
+
+	//delay 1.5s
+	rt_thread_delay(rt_tick_from_millisecond(1500));
+
+	//give d+ 0.6V, d- 0.6V
+	control_set_dp_drive_duty(max_duty);
+	control_set_dn_drive_duty(duty);
+
+	rt_thread_delay(rt_tick_from_millisecond(100));
+#endif
 }
 
+#endif
+
+#if 0
+
+static uint32_t s_max_duty = 0;
+
+static void try_set_current(uint32_t mA)
+{
+	s_max_duty = control_get_max_duty();
+	
+	RT_ASSERT(s_max_duty > 0);
+	
+	uint32_t duty = mA * s_max_duty * 50ul * 10ul / 1000ul / 3300ul;
+			
+	control_set_current_duty(duty);
+}
+
+static void mtk_increase_step(void)
+{
+	try_set_current(0);
+	rt_thread_delay(rt_tick_from_millisecond(100));
+	
+	//start
+	try_set_current(300);
+	rt_thread_delay(rt_tick_from_millisecond(100));
+
+	try_set_current(0);
+	rt_thread_delay(rt_tick_from_millisecond(100));
+
+	try_set_current(300);
+	rt_thread_delay(rt_tick_from_millisecond(100));
+
+	try_set_current(0);
+	rt_thread_delay(rt_tick_from_millisecond(100));
+
+	try_set_current(300);
+	rt_thread_delay(rt_tick_from_millisecond(300));
+
+	try_set_current(0);
+	rt_thread_delay(rt_tick_from_millisecond(100));
+
+	try_set_current(300);
+	rt_thread_delay(rt_tick_from_millisecond(300));
+
+	try_set_current(0);
+	rt_thread_delay(rt_tick_from_millisecond(100));
+
+	try_set_current(300);
+	rt_thread_delay(rt_tick_from_millisecond(300));
+
+	try_set_current(0);
+	rt_thread_delay(rt_tick_from_millisecond(100));
+
+	try_set_current(300);
+	rt_thread_delay(rt_tick_from_millisecond(500));
+
+	try_set_current(0);
+	rt_thread_delay(rt_tick_from_millisecond(100));
+
+	try_set_current(300);
+	rt_thread_delay(rt_tick_from_millisecond(100));
+}
+
+static void mtk_decrease_step(void)
+{
+	try_set_current(0);
+	rt_thread_delay(rt_tick_from_millisecond(100));
+	
+	//start
+	try_set_current(300);
+	rt_thread_delay(rt_tick_from_millisecond(300));
+
+	try_set_current(0);
+	rt_thread_delay(rt_tick_from_millisecond(100));
+
+	try_set_current(300);
+	rt_thread_delay(rt_tick_from_millisecond(300));
+
+	try_set_current(0);
+	rt_thread_delay(rt_tick_from_millisecond(100));
+
+	try_set_current(300);
+	rt_thread_delay(rt_tick_from_millisecond(300));
+
+	try_set_current(0);
+	rt_thread_delay(rt_tick_from_millisecond(100));
+
+	try_set_current(300);
+	rt_thread_delay(rt_tick_from_millisecond(100));
+
+	try_set_current(0);
+	rt_thread_delay(rt_tick_from_millisecond(100));
+
+	try_set_current(300);
+	rt_thread_delay(rt_tick_from_millisecond(100));
+
+	try_set_current(0);
+	rt_thread_delay(rt_tick_from_millisecond(100));
+
+	try_set_current(300);
+	rt_thread_delay(rt_tick_from_millisecond(500));
+
+	try_set_current(0);
+	rt_thread_delay(rt_tick_from_millisecond(100));
+
+	try_set_current(300);
+	rt_thread_delay(rt_tick_from_millisecond(100));
+}
+
+static void mtk_default(void)
+{
+	try_set_current(0);
+	rt_thread_delay(rt_tick_from_millisecond(300));
+}
+
+static void mtk_test(void)
+{
+	switch_disable();
+	switch_to_channel(CC_CTRL_CHANNEL);
+					
+	control_set_voltage_duty(0);
+
+	relay_load_on();
+	relay_empty_on();
+
+	rt_thread_delay(rt_tick_from_millisecond(500));
+
+	switch_enable();
+
+	mtk_increase_step();
+	mtk_increase_step();
+	mtk_increase_step();
+	while (RT_TRUE)
+	{
+		rt_thread_delay(rt_tick_from_millisecond(2000));
+
+		mtk_default();
+	}
+}
+#else
+static void mtk_test(void)
+{
+
+}
 #endif
 
 /* thread phase init */
@@ -121,6 +281,8 @@ void rt_init_thread_entry(void *parameter)
 	meter_init();
 
 	quick_charge_test();
+
+	mtk_test();
 	
 	global_variable_init();
 	

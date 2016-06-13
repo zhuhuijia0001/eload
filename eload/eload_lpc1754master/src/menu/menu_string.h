@@ -273,22 +273,25 @@ static const char str_indicate_delay_time[] = "指示灯延迟时间";
 static const char str_factory_mode[] = "工 厂 模 式";
 
 /* device adjust */
-static const char str_device_adjust[] = "仪器校准";
+static const char str_device_adjust[] = "仪 器 校 准";
 
 /* device privilege */
-static const char str_device_privilege[] = "仪器权限";
-
-static const char str_device_privilege_caption[] = "仪 器 权 限";
+static const char str_device_privilege[] = "仪 器 权 限";
 
 /* life limit */
-static const char str_life_limit[] = "寿命限制";
-
-static const char str_life_limit_caption[] = "寿 命 限 制";
+static const char str_life_limit[] = "寿 命 限 制";
 
 /* phone setting */
-static const char str_phone_setting[] = "电话设置";
+static const char str_phone_setting[] = "电 话 设 置";
 
-static const char str_phone_setting_caption[] = "电 话 设 置";
+/* password setting */
+static const char str_password_setting[] = "密 码 设 置";
+
+/* password */
+static const char str_password[] = "密码";
+
+/* please input password */
+static const char str_input_password[] = "请输入密码";
 
 /* QC2.0 test */
 static const char str_QC20_test[] = "QC2.0快充测试功能";
@@ -303,7 +306,7 @@ static const char str_power_on_count_setting[] = "开机次数设置";
 static const char str_actual_power_on_count[] = "实际开机次数";
 
 /* power on count clear reminder */
-static const char str_clear_power_on_count_reminder[] = "左右键同按开机次数清零";
+static const char str_clear_power_on_count_reminder[] = "按左左右右键开机次数清零";
 
 /* count */
 static const char str_count[] = "次";
@@ -376,4 +379,7 @@ static const char str_channel[] = "通道";
 
 /* phone */
 static const char str_contact_phone[] = "联系电话:";
+
+/* automatic */
+static const char str_automatic[] = "自动 ";
 

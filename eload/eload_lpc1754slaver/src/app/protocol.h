@@ -44,7 +44,8 @@
 /* test status */
 #define TEST_STATUS_IDLE       0x00
 #define TEST_STATUS_ON         0x01
-#define TEST_STATUS_ABNORMAL   0x02
+#define TEST_STATUS_NORMAL     0x02
+#define TEST_STATUS_ABNORMAL   0x03
 
 /* test category */
 #define TEST_CATEGORY_SYNTH    0x00
@@ -52,7 +53,6 @@
 #define TEST_CATEGORY_MTK      0x02
 
 /* test voltage level */
-#define TEST_VOLTAGE_LEVEL_DEFAULT  0x00
 #define TEST_VOLTAGE_LEVEL_5V       0x01
 #define TEST_VOLTAGE_LEVEL_9V       0x02
 #define TEST_VOLTAGE_LEVEL_12V      0x03
@@ -70,6 +70,9 @@
 #define MAX_RECV_PACKET_SIZE   36
 
 #define MAX_SEND_PACKET_SIZE   22
+
+/* automatic time */
+#define AUTOMATIC_TIME      0xffffffff
 
 #endif
 

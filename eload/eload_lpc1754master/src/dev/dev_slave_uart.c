@@ -14,6 +14,9 @@
 #define LPC_SLAVE_UART		  LPC_UART3
 #define SLAVE_UART_IRQn		  UART3_IRQn
 
+/* irq priority */
+#define  UART3_IRQ_PRIORITY            5
+
 struct dev_slave_uart
 {
 	struct rt_device parent;
@@ -110,6 +113,8 @@ static void uart3_init(rt_uint32_t baudrate)
 	//int
 	UART_IntConfig(LPC_SLAVE_UART, UART_INTCFG_RBR, ENABLE);
 
+	NVIC_SetPriority(UART3_IRQn, UART3_IRQ_PRIORITY);
+	
 	//enable
 	UART_TxCmd(LPC_SLAVE_UART, ENABLE);
 }

@@ -479,6 +479,16 @@ static void load_device_privilege(DEVICE_PRIVILEGE *device_privilege)
 	load_parameter(STRUCT_OFFSET(PARAMETER, device_privilege), device_privilege, sizeof(*device_privilege));
 }
 
+static void load_test_category(TEST_CATEGORY *test_category)
+{
+	load_parameter(STRUCT_OFFSET(PARAMETER, cur_test_category), test_category, sizeof(*test_category));
+}
+
+static void load_test_group(uint32_t *test_group)
+{
+	load_parameter(STRUCT_OFFSET(PARAMETER, cur_test_group), test_group, sizeof(*test_group));
+}
+
 static void load_group_test_setting(TEST_CATEGORY type, int group)
 {
 	if (type == TEST_CATEGORY_SYNTH_TEST)
@@ -493,6 +503,16 @@ static void load_group_test_setting(TEST_CATEGORY type, int group)
 	{
 		load_parameter(STRUCT_OFFSET(PARAMETER, mtk_test_setting[group]), &s_mtk_test_setting, sizeof(s_mtk_test_setting));
 	}
+}
+
+static void save_test_category(TEST_CATEGORY test_category)
+{
+	save_parameter(STRUCT_OFFSET(PARAMETER, cur_test_category), &test_category, sizeof(test_category));
+}
+
+static void save_test_group(uint32_t test_group)
+{
+	save_parameter(STRUCT_OFFSET(PARAMETER, cur_test_group), &test_group, sizeof(test_group));
 }
 
 static void save_synth_test_empty_load_setting(int group)
@@ -3398,16 +3418,22 @@ static void edit_group(uint8_t key)
 				if (s_device_privilege.QC_20_test_on_off == OPTION_ON)
 				{
 					s_cur_test_category = TEST_CATEGORY_QC_20_TEST;
+
+					save_test_category(s_cur_test_category);
 				}
 				else if (s_device_privilege.MTK_test_on_off == OPTION_ON)
 				{
 					s_cur_test_category = TEST_CATEGORY_MTK_TEST;
+
+					save_test_category(s_cur_test_category);
 				}
 				
 				s_cur_group = 0;
 
 				need_refresh_caption = true;
 			}
+
+			save_test_group(s_cur_group);
 		}
 		else if (s_cur_test_category == TEST_CATEGORY_QC_20_TEST)
 		{
@@ -3417,17 +3443,22 @@ static void edit_group(uint8_t key)
 				if (s_device_privilege.MTK_test_on_off == OPTION_ON)
 				{
 					s_cur_test_category = TEST_CATEGORY_MTK_TEST;
-				}
 
+					save_test_category(s_cur_test_category);
+				}
 				else
 				{
 					s_cur_test_category = TEST_CATEGORY_SYNTH_TEST;
+
+					save_test_category(s_cur_test_category);
 				}
 
 				s_cur_group = 0;
 
 				need_refresh_caption = true;
 			}
+
+			save_test_group(s_cur_group);
 		}
 		else if (s_cur_test_category == TEST_CATEGORY_MTK_TEST)
 		{
@@ -3436,10 +3467,14 @@ static void edit_group(uint8_t key)
 			{
 				s_cur_test_category = TEST_CATEGORY_SYNTH_TEST;
 
+				save_test_category(s_cur_test_category);
+
 				s_cur_group = 0;
 
 				need_refresh_caption = true;
 			}
+			
+			save_test_group(s_cur_group);
 		}
 		
 		load_group_test_setting(s_cur_test_category, s_cur_group);
@@ -3483,12 +3518,16 @@ static void edit_group(uint8_t key)
 					s_cur_test_category = TEST_CATEGORY_MTK_TEST;
 
 					s_cur_group = MTK_TEST_GROUP_COUNT - 1;
+
+					save_test_category(s_cur_test_category);
 				}
 				else if (s_device_privilege.QC_20_test_on_off == OPTION_ON)
 				{
 					s_cur_test_category = TEST_CATEGORY_QC_20_TEST;
 
 					s_cur_group = QC_20_TEST_GROUP_COUNT - 1;
+
+					save_test_category(s_cur_test_category);
 				}
 				else
 				{
@@ -3497,6 +3536,8 @@ static void edit_group(uint8_t key)
 
 				need_refresh_caption = true;
 			}
+
+			save_test_group(s_cur_group);
 		}
 		else if (s_cur_test_category == TEST_CATEGORY_QC_20_TEST)
 		{
@@ -3505,10 +3546,14 @@ static void edit_group(uint8_t key)
 			{
 				s_cur_test_category = TEST_CATEGORY_SYNTH_TEST;
 
+				save_test_category(s_cur_test_category);
+				
 				s_cur_group = SYNTH_TEST_GROUP_COUNT - 1;
 
 				need_refresh_caption = true;
 			}
+
+			save_test_group(s_cur_group);
 		}
 		else if (s_cur_test_category == TEST_CATEGORY_MTK_TEST)
 		{
@@ -3519,17 +3564,23 @@ static void edit_group(uint8_t key)
 				{
 					s_cur_test_category = TEST_CATEGORY_QC_20_TEST;
 
+					save_test_category(s_cur_test_category);
+				
 					s_cur_group = TEST_CATEGORY_QC_20_TEST - 1;
 				}
 				else
 				{
 					s_cur_test_category = TEST_CATEGORY_SYNTH_TEST;
 
+					save_test_category(s_cur_test_category);
+				
 					s_cur_group = TEST_CATEGORY_SYNTH_TEST - 1;
 				}
 
 				need_refresh_caption = true;
 			}
+
+			save_test_group(s_cur_group);
 		}
 		
 		load_group_test_setting(s_cur_test_category, s_cur_group);
@@ -4075,9 +4126,18 @@ static void key_handler(void *msg)
 {
 	key_t key_msg = (key_t)(uint32_t)msg;
 	uint8_t key = KEY_VALUE(key_msg);
-	
-	if (KEY_TYPE(key_msg) == MASK_KEY_RELEASE 
-		|| (s_edit_item == EDIT_GROUP && KEY_TYPE(key_msg) != MASK_KEY_PRESS))
+
+	if (KEY_TYPE(key_msg) == MASK_KEY_RELEASE) 
+	{
+		return;
+	}
+
+	if (KEY_TYPE(key_msg) != MASK_KEY_PRESS && (key == KEY_OK || key == KEY_CANCEL))
+	{
+		return;
+	}
+
+	if (s_edit_item == EDIT_GROUP && KEY_TYPE(key_msg) != MASK_KEY_PRESS)
 	{
 		return;
 	}
@@ -4250,7 +4310,51 @@ static void init_callback(void *msg)
 
 	if (id == MENU_ID_MAIN)
 	{
+		uint32_t group;
+		
 		load_device_privilege(&s_device_privilege);
+
+		/* load test group */
+		load_test_group(&group);
+
+		load_test_category(&s_cur_test_category);
+
+		if (s_cur_test_category == TEST_CATEGORY_SYNTH_TEST)
+		{
+			s_cur_group = group;
+		}
+		else if (s_cur_test_category == TEST_CATEGORY_QC_20_TEST)
+		{
+			if (s_device_privilege.QC_20_test_on_off == OPTION_ON)
+			{
+				s_cur_group = group;
+			}
+			else
+			{
+				s_cur_test_category = TEST_CATEGORY_SYNTH_TEST;
+
+				s_cur_group = 0;
+
+				save_test_category(s_cur_test_category);
+				save_test_group(s_cur_group);
+			}
+		}
+		else
+		{
+			if (s_device_privilege.MTK_test_on_off == OPTION_ON)
+			{
+				s_cur_group = group;
+			}
+			else
+			{
+				s_cur_test_category = TEST_CATEGORY_SYNTH_TEST;
+
+				s_cur_group = 0;
+
+				save_test_category(s_cur_test_category);
+				save_test_group(s_cur_group);
+			}
+		}
 		
 		load_group_test_setting(s_cur_test_category, s_cur_group);
 

@@ -355,6 +355,11 @@ static void key_handler(void *msg)
 {
 	key_t key_msg = (key_t)(uint32_t)msg;
 	uint8_t key = KEY_VALUE(key_msg);
+
+	if (KEY_TYPE(key_msg) != MASK_KEY_PRESS && (key == KEY_OK || key == KEY_CANCEL))
+	{
+		return;
+	}
 	
 	if (KEY_TYPE(key_msg) != MASK_KEY_RELEASE)
 	{

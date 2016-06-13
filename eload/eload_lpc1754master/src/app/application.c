@@ -36,6 +36,8 @@
 
 #include "type.h"
 
+#include "app_cfg.h"
+
 #include "lcd.h"
 
 #include "beeper.h"
@@ -63,7 +65,7 @@
 /* determine whether it is allowed to enter factory mode */
 static bool can_enter_main_menu(void)
 {
-	return !(key_is_pressed(KEY_UP) && key_is_pressed(KEY_DOWN));
+	return !(key_is_pressed(KEY_UP)/* && key_is_pressed(KEY_DOWN)*/);
 }
 
 static void check_power_on_limit(void)
@@ -150,9 +152,9 @@ static void rt_operation_entry(void *parameter)
 static void operation_start(void)
 {
 	rt_thread_t tid;
-	tid = rt_thread_create("oper", rt_operation_entry, RT_NULL, 
-							1024, 19, 10);
+	tid = rt_thread_create("oper", rt_operation_entry, RT_NULL, 1024, OPERATION_THREAD_PRIORITY, 10);
 	RT_ASSERT(tid != RT_NULL);
+
 	rt_thread_startup(tid);
 }
 
@@ -161,12 +163,13 @@ void rt_init_thread_entry(void *parameter)
 {
 	bool need_save_default_param = false;
 	
-	/* wait for some time */
-	rt_thread_delay(rt_tick_from_millisecond(300));
-	
 	/* initialize platform */
 	platform_init();
 
+	beeper_init();
+	
+	led_init();
+	
 	/* Filesystem Initialization */
 #ifdef RT_USING_DFS
 
@@ -228,10 +231,6 @@ void rt_init_thread_entry(void *parameter)
 	
 	lcd_set_backlight(100);
 	lcd_validate_cmd();
-	
-	beeper_init();
-	
-	led_init();
 
 	/* start operation */
 	operation_start();
@@ -241,9 +240,9 @@ int rt_application_init(void)
 {
     rt_thread_t tid;
 
-    tid = rt_thread_create("init", rt_init_thread_entry, RT_NULL,
-							2048, RT_THREAD_PRIORITY_MAX / 3, 20);
+    tid = rt_thread_create("init", rt_init_thread_entry, RT_NULL, 2048, INIT_THREAD_PRIORITY, 10);
     RT_ASSERT(tid != RT_NULL); 
+
 	rt_thread_startup(tid);
 	
 	return 0;

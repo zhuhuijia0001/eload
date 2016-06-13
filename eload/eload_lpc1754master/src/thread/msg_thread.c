@@ -1,6 +1,8 @@
 #include <rtthread.h>
 #include <stdint.h>
 
+#include "app_cfg.h"
+
 #include "menu_op.h"
 #include "key.h"
 
@@ -70,7 +72,7 @@ int start_menu_session(void)
 	s_msg_queue = rt_mq_create("msgqueue", sizeof(MSG), MSG_QUEUE_LEN, RT_IPC_FLAG_FIFO);
 	RT_ASSERT(s_msg_queue != RT_NULL);
 	
-	tid = rt_thread_create("keythread", key_thread_entry, RT_NULL, 512, 11, 10);
+	tid = rt_thread_create("keythread", key_thread_entry, RT_NULL, 512, MSG_THREAD_PRIORITY, 10);
 
 	RT_ASSERT(tid != RT_NULL);
 	rt_thread_startup(tid);

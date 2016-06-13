@@ -41,8 +41,8 @@ static uint8_t s_key_index = 0;
 static bool check_acc_keys(void)
 {
 	if (s_acc_keys[0] == KEY_LEFT
-		&& s_acc_keys[1] == KEY_RIGHT
-		&& s_acc_keys[2] == KEY_LEFT
+		&& s_acc_keys[1] == KEY_LEFT
+		&& s_acc_keys[2] == KEY_RIGHT
 		&& s_acc_keys[3] == KEY_RIGHT)
 	{
 		return true;
@@ -238,6 +238,11 @@ static void key_handler(void *msg)
 	uint8_t key = KEY_VALUE(key_msg);
 	
 	if (KEY_TYPE(key_msg) == MASK_KEY_RELEASE)
+	{
+		return;
+	}
+
+	if (KEY_TYPE(key_msg) != MASK_KEY_PRESS && (key == KEY_OK || key == KEY_CANCEL))
 	{
 		return;
 	}

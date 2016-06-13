@@ -20,6 +20,8 @@ typedef enum
 
 	FACTORY_ITEM_PHONE,
 
+	FACTORY_ITEM_PASSWORD,
+
 	FACTORY_ITEM_COUNT
 } factory_item;
 
@@ -33,7 +35,9 @@ static MENU_ID const s_factory_id_arr[] =
 	
 	[FACTORY_ITEM_LIFE] = MENU_ID_LIFE,
 	
-	[FACTORY_ITEM_PHONE] = MENU_ID_PHONE_SETTING
+	[FACTORY_ITEM_PHONE] = MENU_ID_PHONE_SETTING,
+
+	[FACTORY_ITEM_PASSWORD] = MENU_ID_PASSWORD_SETTING,
 };
 
 static void (*const s_focus_factory_item[])(void) = 
@@ -44,7 +48,9 @@ static void (*const s_focus_factory_item[])(void) =
 	
 	[FACTORY_ITEM_LIFE]      = draw_focus_factory_item_life,
 	
-	[FACTORY_ITEM_PHONE]     = draw_focus_factory_item_phone
+	[FACTORY_ITEM_PHONE]     = draw_focus_factory_item_phone,
+
+	[FACTORY_ITEM_PASSWORD]  = draw_focus_factory_item_password
 };
 
 static void (*const s_unfocus_factory_item[])(void) = 
@@ -55,7 +61,9 @@ static void (*const s_unfocus_factory_item[])(void) =
 	
 	[FACTORY_ITEM_LIFE]      = draw_normal_factory_item_life,
 	
-	[FACTORY_ITEM_PHONE]     = draw_normal_factory_item_phone
+	[FACTORY_ITEM_PHONE]     = draw_normal_factory_item_phone,
+
+	[FACTORY_ITEM_PASSWORD]  = draw_normal_factory_item_password
 };
 
 static void key_handler(void *msg)
@@ -64,6 +72,11 @@ static void key_handler(void *msg)
 	uint8_t key = KEY_VALUE(key_msg);
 	
 	if (KEY_TYPE(key_msg) == MASK_KEY_RELEASE)
+	{
+		return;
+	}
+
+	if (KEY_TYPE(key_msg) != MASK_KEY_PRESS && (key == KEY_OK || key == KEY_CANCEL))
 	{
 		return;
 	}

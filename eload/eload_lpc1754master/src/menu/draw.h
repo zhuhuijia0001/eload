@@ -3,6 +3,8 @@
 
 #include "parameter.h"
 
+#include "protocol.h"
+
 #include "global.h"
 
 /* color config */
@@ -1347,11 +1349,12 @@ extern void draw_edit_channel_option(int channel, OPTION_ON_OFF on_off);
 #define FACTORY_CAPTION_LEFT                 CC_SETTING_CAPTION_LEFT
 #define FACTORY_CAPTION_TOP                  CC_SETTING_CAPTION_TOP
 
-#define FACTORY_MENU_ITEM_LEFT               330
-#define FACTORY_MENU_ITEM_TOP_ADJUST         130
-#define FACTORY_MENU_ITEM_TOP_PRIVILEGE      (FACTORY_MENU_ITEM_TOP_ADJUST + 80)
-#define FACTORY_MENU_ITEM_TOP_LIFE           (FACTORY_MENU_ITEM_TOP_PRIVILEGE + 80)
-#define FACTORY_MENU_ITEM_TOP_PHONE          (FACTORY_MENU_ITEM_TOP_LIFE + 80)
+#define FACTORY_MENU_ITEM_LEFT               300
+#define FACTORY_MENU_ITEM_TOP_ADJUST         100
+#define FACTORY_MENU_ITEM_TOP_PRIVILEGE      (FACTORY_MENU_ITEM_TOP_ADJUST + 70)
+#define FACTORY_MENU_ITEM_TOP_LIFE           (FACTORY_MENU_ITEM_TOP_PRIVILEGE + 70)
+#define FACTORY_MENU_ITEM_TOP_PHONE          (FACTORY_MENU_ITEM_TOP_LIFE + 70)
+#define FACTORY_MENU_ITEM_TOP_PASSWORD       (FACTORY_MENU_ITEM_TOP_PHONE + 70)
 
 extern void draw_factory_menu(void);
 
@@ -1366,6 +1369,9 @@ extern void draw_focus_factory_item_life(void);
 
 extern void draw_normal_factory_item_phone(void);
 extern void draw_focus_factory_item_phone(void);
+
+extern void draw_normal_factory_item_password(void);
+extern void draw_focus_factory_item_password(void);
 
 
 /* device adjust menu */
@@ -1562,4 +1568,42 @@ extern void move_next_edit_phone_setting_customer_power_on_limit_digit(void);
 
 extern void draw_normal_phone_setting_actual_customer_power_on_count(uint32_t integer);
 
+/* password setting menu */
+#define PASSWORD_SETTING_CAPTION_LEFT          CC_SETTING_CAPTION_LEFT
+#define PASSWORD_SETTING_CAPTION_TOP           CC_SETTING_CAPTION_TOP
+
+#define PASSWORD_SETTING_LEFT   290
+#define PASSWORD_SETTING_TOP    250
+
+#define PASSWORD_SETTING_COLON_LEFT            390
+
+#define PASSWORD_SETTING_PASSWORD_EDIT_LEFT  430
+
+extern void draw_password_setting_menu(void);
+
+extern void draw_focus_password_setting_password(const PASSWORD *password);
+
+extern void enter_edit_password_setting_password(const PASSWORD *password);
+extern void get_edit_password_setting_password(PASSWORD *password);
+
+extern void increase_edit_password_setting_password_digit(void);
+extern void decrease_edit_password_setting_password_digit(void);
+extern void move_prev_edit_password_setting_password_digit(void);
+extern void move_next_edit_password_setting_password_digit(void);
+
+/* password menu */
+#define PASSWORD_EDIT_LEFT  350
+#define PASSWORD_EDIT_TOP   220
+
+extern void draw_password_menu(void);
+
+extern void enter_edit_password(const PASSWORD *password);
+extern void get_edit_password(PASSWORD *password);
+
+extern void increase_edit_password_digit(void);
+extern void decrease_edit_password_digit(void);
+extern void move_prev_edit_password_digit(void);
+extern void move_next_edit_password_digit(void);
+
 #endif
+

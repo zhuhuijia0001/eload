@@ -182,40 +182,76 @@ static void edit_time(uint8_t key)
 {
 	if (key == KEY_UP)
 	{
-		s_cur_duration += BIG_TEST_DURATION_STEP;
-		if (s_cur_duration > MAX_TEST_DURATION)
+		if (s_cur_duration == AUTOMATIC_TIME)
 		{
-			s_cur_duration = MAX_TEST_DURATION;
+			s_cur_duration = BIG_TEST_DURATION_STEP;
 		}
+		else
+		{
+			s_cur_duration += BIG_TEST_DURATION_STEP;
+			if (s_cur_duration > MAX_TEST_DURATION)
+			{
+				s_cur_duration = AUTOMATIC_TIME;
+			}
+		}
+		
 		draw_edit_short_setting_time(s_cur_duration);
 	}
 	else if (key == KEY_DOWN)
 	{
-		if (s_cur_duration > BIG_TEST_DURATION_STEP)
+		if (s_cur_duration == AUTOMATIC_TIME)
 		{
-			s_cur_duration -= BIG_TEST_DURATION_STEP;
+			s_cur_duration = MAX_TEST_DURATION;
 		}
 		else
 		{
-			s_cur_duration = SMALL_TEST_DURATION_STEP;
+			if (s_cur_duration > BIG_TEST_DURATION_STEP)
+			{
+				s_cur_duration -= BIG_TEST_DURATION_STEP;
+			}
+			else
+			{
+				s_cur_duration = AUTOMATIC_TIME;
+			}
 		}
+		
 		draw_edit_short_setting_time(s_cur_duration);
 	}
 	else if (key == KEY_RIGHT)
 	{
-		s_cur_duration += SMALL_TEST_DURATION_STEP;
-		if (s_cur_duration > MAX_TEST_DURATION)
+		if (s_cur_duration == AUTOMATIC_TIME)
 		{
-			s_cur_duration = MAX_TEST_DURATION;
+			s_cur_duration = SMALL_TEST_DURATION_STEP;
 		}
+		else
+		{
+			s_cur_duration += SMALL_TEST_DURATION_STEP;
+			if (s_cur_duration > MAX_TEST_DURATION)
+			{
+				s_cur_duration = AUTOMATIC_TIME;
+			}
+		}
+		
 		draw_edit_short_setting_time(s_cur_duration);
 	}
 	else if (key == KEY_LEFT)
 	{
-		if (s_cur_duration > SMALL_TEST_DURATION_STEP)
+		if (s_cur_duration == AUTOMATIC_TIME)
 		{
-			s_cur_duration -= SMALL_TEST_DURATION_STEP;
+			s_cur_duration = MAX_TEST_DURATION;
 		}
+		else
+		{
+			if (s_cur_duration > SMALL_TEST_DURATION_STEP)
+			{
+				s_cur_duration -= SMALL_TEST_DURATION_STEP;
+			}
+			else
+			{
+				s_cur_duration = AUTOMATIC_TIME;
+			}
+		}	
+		
 		draw_edit_short_setting_time(s_cur_duration);
 	}
 }
@@ -323,6 +359,11 @@ static void key_handler(void *msg)
 		return;
 	}
 
+	if (KEY_TYPE(key_msg) != MASK_KEY_PRESS && (key == KEY_OK || key == KEY_CANCEL))
+	{
+		return;
+	}
+	
 	beeper_beep(BEEPER_VOL_LOW, 50, 50, 1);
 	
 	if (key == KEY_LEFT || key == KEY_UP)

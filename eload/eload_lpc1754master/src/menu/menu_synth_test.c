@@ -4,6 +4,8 @@
 #include "type.h"
 #include "key_define.h"
 
+#include "app_cfg.h"
+
 #include "menu_op.h"
 #include "menu.h"
 
@@ -65,13 +67,14 @@ static void key_handler(void *msg)
 		return;
 	}
 
+	if (KEY_TYPE(key_msg) != MASK_KEY_PRESS && (key == KEY_OK || key == KEY_CANCEL))
+	{
+		return;
+	}
+	
 	beeper_beep(BEEPER_VOL_LOW, 50, 50, 1);
 
-	if (key == KEY_OK)
-	{
-
-	}
-	else if (key == KEY_CANCEL)
+	if (key == KEY_CANCEL)
 	{	
 		RT_ASSERT(s_test_thread != RT_NULL);
 		rt_thread_delete(s_test_thread);
@@ -100,7 +103,7 @@ static void draw_synth_test_step_empty_load_result(const TEST_RESULT *synth_test
 		
 	draw_synth_test_step_1_voltage(measure_to_actual_voltage((int)synth_test_result->test_content.channel, synth_test_result->test_content.voltage));
 
-	if (synth_test_result->test_content.test_status == TEST_STATUS_IDLE)
+	if (synth_test_result->test_content.test_status == TEST_STATUS_NORMAL)
 	{
 		draw_synth_test_step_1_OK();
 	}
@@ -136,7 +139,7 @@ static void draw_synth_test_step_2_result(const TEST_RESULT *synth_test_result)
 	}
 
 
-	if (synth_test_result->test_content.test_status == TEST_STATUS_IDLE)
+	if (synth_test_result->test_content.test_status == TEST_STATUS_NORMAL)
 	{
 		draw_synth_test_step_2_OK();
 	}
@@ -171,7 +174,7 @@ static void draw_synth_test_step_3_result(const TEST_RESULT *synth_test_result)
 		draw_synth_test_step_3_short(measure_to_actual_current((int)synth_test_result->test_content.channel, synth_test_result->test_content.current));
 	}
 
-	if (synth_test_result->test_content.test_status == TEST_STATUS_IDLE)
+	if (synth_test_result->test_content.test_status == TEST_STATUS_NORMAL)
 	{
 		draw_synth_test_step_3_OK();
 	}
@@ -206,7 +209,7 @@ static void draw_synth_test_step_4_result(const TEST_RESULT *synth_test_result)
 		draw_synth_test_step_4_short(measure_to_actual_current((int)synth_test_result->test_content.channel, synth_test_result->test_content.current));
 	}
 
-	if (synth_test_result->test_content.test_status == TEST_STATUS_IDLE)
+	if (synth_test_result->test_content.test_status == TEST_STATUS_NORMAL)
 	{
 		draw_synth_test_step_4_OK();
 	}
@@ -241,7 +244,7 @@ static void draw_synth_test_step_5_result(const TEST_RESULT *synth_test_result)
 		draw_synth_test_step_5_short(measure_to_actual_current((int)synth_test_result->test_content.channel, synth_test_result->test_content.current));
 	}
 
-	if (synth_test_result->test_content.test_status == TEST_STATUS_IDLE)
+	if (synth_test_result->test_content.test_status == TEST_STATUS_NORMAL)
 	{
 		draw_synth_test_step_5_OK();
 	}
@@ -276,7 +279,7 @@ static void draw_synth_test_step_6_result(const TEST_RESULT *synth_test_result)
 		draw_synth_test_step_6_short(measure_to_actual_current((int)synth_test_result->test_content.channel, synth_test_result->test_content.current));
 	}
 
-	if (synth_test_result->test_content.test_status == TEST_STATUS_IDLE)
+	if (synth_test_result->test_content.test_status == TEST_STATUS_NORMAL)
 	{
 		draw_synth_test_step_6_OK();
 	}
@@ -311,7 +314,7 @@ static void draw_synth_test_step_7_result(const TEST_RESULT *synth_test_result)
 		draw_synth_test_step_7_short(measure_to_actual_current((int)synth_test_result->test_content.channel, synth_test_result->test_content.current));
 	}
 
-	if (synth_test_result->test_content.test_status == TEST_STATUS_IDLE)
+	if (synth_test_result->test_content.test_status == TEST_STATUS_NORMAL)
 	{
 		draw_synth_test_step_7_OK();
 	}
@@ -323,7 +326,7 @@ static void draw_synth_test_step_7_result(const TEST_RESULT *synth_test_result)
 
 static void draw_synth_test_step_discharge_result(const TEST_RESULT *synth_test_result)
 {
-	if (synth_test_result->test_content.test_status == TEST_STATUS_IDLE)
+	if (synth_test_result->test_content.test_status == TEST_STATUS_NORMAL)
 	{
 		draw_synth_test_step_8_OK();
 	}
@@ -1479,6 +1482,8 @@ static void test_thread_entry(void *parameter)
 	uint8_t complete;
 	uint8_t channel_test_result;
 
+	int ret;
+
 	rt_bool_t  discharge_enable = RT_TRUE;
 	
 	for (i = 0; i < SLAVE_PORT_COUNT; i++)
@@ -1520,6 +1525,27 @@ static void test_thread_entry(void *parameter)
 	
 	do
 	{
+		/* wait until idle */
+		uint8_t idle_status = 0x00;
+		
+		do
+		{				
+			ret = test_content_query(&channel_test_content, rt_tick_from_millisecond(QUERY_CONTENT_INTERVAL));
+			if (ret == RT_EOK)
+			{
+				if (channel_test_content.test_status == TEST_STATUS_IDLE)
+				{
+					idle_status |= (1u << channel_test_content.channel);
+
+					if (idle_status == test_channel)
+					{
+						break;
+					}
+				}
+			}
+			
+		} while (RT_TRUE);
+			
 		/* wait for device plugged in */
 		rt_thread_delay(rt_tick_from_millisecond(QUERY_CONTENT_INTERVAL));
 
@@ -1528,7 +1554,7 @@ static void test_thread_entry(void *parameter)
 			continue;
 		}
 
-		/* notify UI */
+		/* notify UI, clear result */
 		s_test_result.test_step = TEST_STEP_NONE;
 
 		s_test_result.test_content.channel = SLAVE_PORT_0;
@@ -1584,26 +1610,28 @@ static void test_thread_entry(void *parameter)
 		while (complete != test_channel)
 		{
 			/* not complete all yet */
-			int ret;
 			
 			/* wait for reply */
 			do
-			{
-				ret = test_content_query(&channel_test_content, rt_tick_from_millisecond(QUERY_CONTENT_INTERVAL));
+			{				
+				ret = test_content_query(&channel_test_content, rt_tick_from_millisecond(QUERY_CONTENT_INTERVAL));			
 			} while (ret != RT_EOK);
 
 			if (channel_test_content.test_status == TEST_STATUS_ON)
 			{
-				s_refresh_count++;
-				if (s_refresh_count == 10)
+				if (channel_test_content.channel == SLAVE_PORT_0)
 				{
-					/* notify UI */
-					s_test_result.test_step = test_step[SLAVE_PORT_0];
-					s_test_result.test_content = channel_test_content;
-					
-					refresh_test_result(&s_test_result);
+					s_refresh_count++;
+					if (s_refresh_count == 5)
+					{
+						/* notify UI */
+						s_test_result.test_step = test_step[SLAVE_PORT_0];
+						s_test_result.test_content = channel_test_content;
+						
+						refresh_test_result(&s_test_result);
 
-					s_refresh_count = 0;
+						s_refresh_count = 0;
+					}
 				}
 			}
 			else if (channel_test_content.test_status == TEST_STATUS_ABNORMAL)
@@ -1660,7 +1688,7 @@ static void test_thread_entry(void *parameter)
 				/* update result */
 				channel_test_result &= ~(1u << channel_test_content.channel);
 			}
-			else if (channel_test_content.test_status == TEST_STATUS_IDLE)
+			else if (channel_test_content.test_status == TEST_STATUS_NORMAL)
 			{
 				/* passed the test */
 				test_cmd.channel = channel_test_content.channel;
@@ -1854,20 +1882,35 @@ static void test_thread_entry(void *parameter)
 				rt_thread_delay(rt_tick_from_millisecond(s_synth_test_setting->discharge_test_setting.indicate_delay));
 			}
 			else if (s_cur_test_category == TEST_CATEGORY_QC_20_TEST)
-			{	
+			{
 				rt_thread_delay(rt_tick_from_millisecond(s_qc_20_test_setting->discharge_test_setting.indicate_delay));
 			}
 			else
 			{
 
 			}
+
+#if 1
+			/* notify to stop test */
+			test_cmd.channel   = SLAVE_PORT_ALL;
+			test_cmd.test_type = TEST_TYPE_NONE;
+			
+			test_cmd_notify(&test_cmd);	
+			
+			for (i = 0; i < CHANNEL_COUNT; i++)
+			{
+				test_step[i] = TEST_STEP_NONE;
+			}
+
+			rt_thread_delay(rt_tick_from_millisecond(200)); 
+#endif
 		}
 		else
 		{
 			do
 			{
 				/* wait for device plugged in */
-				rt_thread_delay(rt_tick_from_millisecond(500));
+				rt_thread_delay(rt_tick_from_millisecond(200));
 				
 			} while (get_cur_voltage(SLAVE_PORT_0) >= EMPTY_LOAD_VOLTAGE_THREASHOULD);
 		}
@@ -1875,27 +1918,12 @@ static void test_thread_entry(void *parameter)
 		/* turn off led */
 		all_pass_led_off();
 		all_fail_led_off();
-
-#if 1
-		/* notify to stop test */
-		test_cmd.channel   = SLAVE_PORT_ALL;
-		test_cmd.test_type = TEST_TYPE_NONE;
-		
-		test_cmd_notify(&test_cmd);	
-		
-		for (i = 0; i < CHANNEL_COUNT; i++)
-		{
-			test_step[i] = TEST_STEP_NONE;
-		}
-#endif
-
-		rt_thread_delay(rt_tick_from_millisecond(500));
 	} while (RT_TRUE);
 }
 
 static void init_test_thread(void)
 {
-	s_test_thread = rt_thread_create("test", test_thread_entry, RT_NULL, 1024, 12, 10);
+	s_test_thread = rt_thread_create("test", test_thread_entry, RT_NULL, 1024, TEST_THREAD_PRIORITY, 10);
 	RT_ASSERT(s_test_thread != RT_NULL);
 
 	rt_thread_startup(s_test_thread);

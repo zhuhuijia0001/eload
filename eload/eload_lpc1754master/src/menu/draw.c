@@ -2915,8 +2915,6 @@ void draw_empty_load_setting_menu(void)
 
 	lcd_display_ascii_char(EMPTY_LOAD_SETTING_COLON_LEFT, EMPTY_LOAD_SETTING_TIME_TOP, ':', RDONLY_FORE_COLOR, FONT_48);
 
-	lcd_display_string(EMPTY_LOAD_SETTING_TIME_UNIT_LEFT, EMPTY_LOAD_SETTING_TIME_TOP, str_second, RDONLY_FORE_COLOR, FONT_48);
-
 	/* ac */
 	lcd_display_string(EMPTY_LOAD_SETTING_AC_LEFT, EMPTY_LOAD_SETTING_AC_TOP, str_ac_current, RDONLY_FORE_COLOR, FONT_48);
 
@@ -2943,28 +2941,46 @@ void draw_empty_load_setting_menu(void)
 	lcd_display_string(EMPTY_LOAD_DP_DN_SETTING_LEFT, EMPTY_LOAD_DP_DN_SETTING_TOP, str_enter_setting, EDITABLE_FORE_COLOR, FONT_48);
 }
 
+static void draw_empty_load_setting_time(uint32_t ms)
+{
+	if (ms == AUTOMATIC_TIME)
+	{
+		lcd_display_string(EMPTY_LOAD_SETTING_EDIT_TIME_LEFT, EMPTY_LOAD_SETTING_TIME_TOP, str_automatic, EDITABLE_FORE_COLOR, FONT_48);
+
+		lcd_set_back_color(SCREEN_BACK_COLOR);
+		
+		lcd_display_string(EMPTY_LOAD_SETTING_TIME_UNIT_LEFT, EMPTY_LOAD_SETTING_TIME_TOP, "  ", RDONLY_FORE_COLOR, FONT_48);
+	}
+	else
+	{
+		lcd_display_number(EMPTY_LOAD_SETTING_EDIT_TIME_LEFT, EMPTY_LOAD_SETTING_TIME_TOP, ms / 1000, TIME_VAL_INTEGER_LEN, ms % 1000 / s_number_divider[TIME_VAL_DECIMAL_LEN], TIME_VAL_DECIMAL_LEN, 
+						false, true, EDITABLE_FORE_COLOR, FONT_48);
+
+		lcd_set_back_color(SCREEN_BACK_COLOR);
+		
+		lcd_display_string(EMPTY_LOAD_SETTING_TIME_UNIT_LEFT, EMPTY_LOAD_SETTING_TIME_TOP, str_second, RDONLY_FORE_COLOR, FONT_48);
+	}
+}
+
 void draw_normal_empty_load_setting_time(uint32_t ms)
 {
 	lcd_set_back_color(SCREEN_BACK_COLOR);
-	
-	lcd_display_number(EMPTY_LOAD_SETTING_EDIT_TIME_LEFT, EMPTY_LOAD_SETTING_TIME_TOP, ms / 1000, TIME_VAL_INTEGER_LEN, ms % 1000 / s_number_divider[TIME_VAL_DECIMAL_LEN], TIME_VAL_DECIMAL_LEN, 
-						false, true, EDITABLE_FORE_COLOR, FONT_48);	
+
+	draw_empty_load_setting_time(ms);
 }
 
 void draw_focus_empty_load_setting_time(uint32_t ms)
 {
 	lcd_set_back_color(FOCUS_BACK_COLOR);
 	
-	lcd_display_number(EMPTY_LOAD_SETTING_EDIT_TIME_LEFT, EMPTY_LOAD_SETTING_TIME_TOP, ms / 1000, TIME_VAL_INTEGER_LEN, ms % 1000 / s_number_divider[TIME_VAL_DECIMAL_LEN], TIME_VAL_DECIMAL_LEN, 
-						false, true, EDITABLE_FORE_COLOR, FONT_48);		
+	draw_empty_load_setting_time(ms);		
 }
 
 void draw_edit_empty_load_setting_time(uint32_t ms)
 {
 	lcd_set_back_color(EDIT_BACK_COLOR);
 	
-	lcd_display_number(EMPTY_LOAD_SETTING_EDIT_TIME_LEFT, EMPTY_LOAD_SETTING_TIME_TOP, ms / 1000, TIME_VAL_INTEGER_LEN, ms % 1000 / s_number_divider[TIME_VAL_DECIMAL_LEN], TIME_VAL_DECIMAL_LEN, 
-						false, true, EDITABLE_FORE_COLOR, FONT_48);		
+	draw_empty_load_setting_time(ms);	
 }
 
 void draw_normal_empty_load_setting_ac(uint32_t uA)
@@ -3284,8 +3300,6 @@ void draw_cc_setting_menu(void)
 
 	lcd_display_ascii_char(CC_SETTING_COLON_LEFT, CC_SETTING_TIME_TOP, ':', RDONLY_FORE_COLOR, FONT_48);
 
-	lcd_display_string(CC_SETTING_TIME_UNIT_LEFT, CC_SETTING_TIME_TOP, str_second, RDONLY_FORE_COLOR, FONT_48);
-
 	/* ac */
 	lcd_display_string(CC_SETTING_AC_LEFT, CC_SETTING_AC_TOP, str_ac_current, RDONLY_FORE_COLOR, FONT_48);
 
@@ -3312,28 +3326,46 @@ void draw_cc_setting_menu(void)
 	lcd_display_ascii_char(CC_SETTING_VOLTAGE_RANGE_UNIT_LEFT, CC_SETTING_VOLTAGE_RANGE_TOP, 'V', RDONLY_FORE_COLOR, FONT_48);
 }
 
+static void draw_cc_setting_time(uint32_t ms)
+{
+	if (ms == AUTOMATIC_TIME)
+	{
+		lcd_display_string(CC_SETTING_EDIT_TIME_LEFT, CC_SETTING_TIME_TOP, str_automatic, EDITABLE_FORE_COLOR, FONT_48);
+
+		lcd_set_back_color(SCREEN_BACK_COLOR);
+		
+		lcd_display_string(CC_SETTING_TIME_UNIT_LEFT, CC_SETTING_TIME_TOP, "  ", RDONLY_FORE_COLOR, FONT_48);
+	}
+	else
+	{
+		lcd_display_number(CC_SETTING_EDIT_TIME_LEFT, CC_SETTING_TIME_TOP, ms / 1000, TIME_VAL_INTEGER_LEN, ms % 1000 / s_number_divider[TIME_VAL_DECIMAL_LEN], TIME_VAL_DECIMAL_LEN, 
+						false, true, EDITABLE_FORE_COLOR, FONT_48);
+
+		lcd_set_back_color(SCREEN_BACK_COLOR);
+		
+		lcd_display_string(CC_SETTING_TIME_UNIT_LEFT, CC_SETTING_TIME_TOP, str_second, RDONLY_FORE_COLOR, FONT_48);
+	}
+}
+
 void draw_normal_cc_setting_time(uint32_t ms)
 {
 	lcd_set_back_color(SCREEN_BACK_COLOR);
 	
-	lcd_display_number(CC_SETTING_EDIT_TIME_LEFT, CC_SETTING_TIME_TOP, ms / 1000, TIME_VAL_INTEGER_LEN, ms % 1000 / s_number_divider[TIME_VAL_DECIMAL_LEN], TIME_VAL_DECIMAL_LEN, 
-						false, true, EDITABLE_FORE_COLOR, FONT_48);
+	draw_cc_setting_time(ms);
 }
 
 void draw_focus_cc_setting_time(uint32_t ms)
 {
 	lcd_set_back_color(FOCUS_BACK_COLOR);
 	
-	lcd_display_number(CC_SETTING_EDIT_TIME_LEFT, CC_SETTING_TIME_TOP, ms / 1000, TIME_VAL_INTEGER_LEN, ms % 1000 / s_number_divider[TIME_VAL_DECIMAL_LEN], TIME_VAL_DECIMAL_LEN, 
-						false, true, EDITABLE_FORE_COLOR, FONT_48);
+	draw_cc_setting_time(ms);
 }
 
 void draw_edit_cc_setting_time(uint32_t ms)
 {
 	lcd_set_back_color(EDIT_BACK_COLOR);
 	
-	lcd_display_number(CC_SETTING_EDIT_TIME_LEFT, CC_SETTING_TIME_TOP, ms / 1000, TIME_VAL_INTEGER_LEN, ms % 1000 / s_number_divider[TIME_VAL_DECIMAL_LEN], TIME_VAL_DECIMAL_LEN, 
-						false, true, EDITABLE_FORE_COLOR, FONT_48);
+	draw_cc_setting_time(ms);
 }
 
 void draw_normal_cc_setting_ac(uint32_t uA)
@@ -3470,8 +3502,6 @@ void draw_cv_setting_menu(void)
 
 	lcd_display_ascii_char(CV_SETTING_COLON_LEFT, CV_SETTING_TIME_TOP, ':', RDONLY_FORE_COLOR, FONT_48);
 
-	lcd_display_string(CV_SETTING_TIME_UNIT_LEFT, CV_SETTING_TIME_TOP, str_second, RDONLY_FORE_COLOR, FONT_48);
-
 	/* ac */
 	lcd_display_string(CV_SETTING_AC_LEFT, CV_SETTING_AC_TOP, str_ac_current, RDONLY_FORE_COLOR, FONT_48);
 
@@ -3499,28 +3529,46 @@ void draw_cv_setting_menu(void)
 	lcd_display_ascii_char(CV_SETTING_CURRENT_RANGE_UNIT_LEFT, CV_SETTING_CURRENT_RANGE_TOP, 'A', RDONLY_FORE_COLOR, FONT_48);
 }
 
+static void draw_cv_setting_time(uint32_t ms)
+{
+	if (ms == AUTOMATIC_TIME)
+	{
+		lcd_display_string(CV_SETTING_EDIT_TIME_LEFT, CV_SETTING_TIME_TOP, str_automatic, EDITABLE_FORE_COLOR, FONT_48);
+
+		lcd_set_back_color(SCREEN_BACK_COLOR);
+		
+		lcd_display_string(CV_SETTING_TIME_UNIT_LEFT, CV_SETTING_TIME_TOP, "  ", RDONLY_FORE_COLOR, FONT_48);
+	}
+	else
+	{
+		lcd_display_number(CV_SETTING_EDIT_TIME_LEFT, CV_SETTING_TIME_TOP, ms / 1000, TIME_VAL_INTEGER_LEN, ms % 1000 / s_number_divider[TIME_VAL_DECIMAL_LEN], TIME_VAL_DECIMAL_LEN, 
+						false, true, EDITABLE_FORE_COLOR, FONT_48);
+
+		lcd_set_back_color(SCREEN_BACK_COLOR);
+		
+		lcd_display_string(CV_SETTING_TIME_UNIT_LEFT, CV_SETTING_TIME_TOP, str_second, RDONLY_FORE_COLOR, FONT_48);
+	}
+}
+
 void draw_normal_cv_setting_time(uint32_t ms)
 {
 	lcd_set_back_color(SCREEN_BACK_COLOR);
 	
-	lcd_display_number(CV_SETTING_EDIT_TIME_LEFT, CV_SETTING_TIME_TOP, ms / 1000, TIME_VAL_INTEGER_LEN, ms % 1000 / s_number_divider[TIME_VAL_DECIMAL_LEN], TIME_VAL_DECIMAL_LEN, 
-						false, true, EDITABLE_FORE_COLOR, FONT_48);	
+	draw_cv_setting_time(ms);
 }
 
 void draw_focus_cv_setting_time(uint32_t ms)
 {
 	lcd_set_back_color(FOCUS_BACK_COLOR);
 	
-	lcd_display_number(CV_SETTING_EDIT_TIME_LEFT, CV_SETTING_TIME_TOP, ms / 1000, TIME_VAL_INTEGER_LEN, ms % 1000 / s_number_divider[TIME_VAL_DECIMAL_LEN], TIME_VAL_DECIMAL_LEN, 
-						false, true, EDITABLE_FORE_COLOR, FONT_48);	
+	draw_cv_setting_time(ms);
 }
 
 void draw_edit_cv_setting_time(uint32_t ms)
 {
 	lcd_set_back_color(EDIT_BACK_COLOR);
 	
-	lcd_display_number(CV_SETTING_EDIT_TIME_LEFT, CV_SETTING_TIME_TOP, ms / 1000, TIME_VAL_INTEGER_LEN, ms % 1000 / s_number_divider[TIME_VAL_DECIMAL_LEN], TIME_VAL_DECIMAL_LEN, 
-						false, true, EDITABLE_FORE_COLOR, FONT_48);	
+	draw_cv_setting_time(ms);
 }
 
 void draw_normal_cv_setting_ac(uint32_t uA)
@@ -3657,8 +3705,6 @@ void draw_cr_setting_menu(void)
 
 	lcd_display_ascii_char(CR_SETTING_COLON_LEFT, CR_SETTING_TIME_TOP, ':', RDONLY_FORE_COLOR, FONT_48);
 
-	lcd_display_string(CR_SETTING_TIME_UNIT_LEFT, CR_SETTING_TIME_TOP, str_second, RDONLY_FORE_COLOR, FONT_48);
-
 	/* ac */
 	lcd_display_string(CR_SETTING_AC_LEFT, CR_SETTING_AC_TOP, str_ac_current, RDONLY_FORE_COLOR, FONT_48);
 
@@ -3696,28 +3742,46 @@ void draw_cr_setting_menu(void)
 	lcd_display_ascii_char(CR_SETTING_VOLTAGE_RANGE_UNIT_LEFT, CR_SETTING_VOLTAGE_RANGE_TOP, 'V', RDONLY_FORE_COLOR, FONT_48);
 }
 
+static void draw_cr_setting_time(uint32_t ms)
+{
+	if (ms == AUTOMATIC_TIME)
+	{
+		lcd_display_string(CR_SETTING_EDIT_TIME_LEFT, CR_SETTING_TIME_TOP, str_automatic, EDITABLE_FORE_COLOR, FONT_48);
+
+		lcd_set_back_color(SCREEN_BACK_COLOR);
+		
+		lcd_display_string(CR_SETTING_TIME_UNIT_LEFT, CR_SETTING_TIME_TOP, "  ", RDONLY_FORE_COLOR, FONT_48);
+	}
+	else
+	{
+		lcd_display_number(CR_SETTING_EDIT_TIME_LEFT, CR_SETTING_TIME_TOP, ms / 1000, TIME_VAL_INTEGER_LEN, ms % 1000 / s_number_divider[TIME_VAL_DECIMAL_LEN], TIME_VAL_DECIMAL_LEN, 
+						false, true, EDITABLE_FORE_COLOR, FONT_48);
+
+		lcd_set_back_color(SCREEN_BACK_COLOR);
+		
+		lcd_display_string(CR_SETTING_TIME_UNIT_LEFT, CR_SETTING_TIME_TOP, str_second, RDONLY_FORE_COLOR, FONT_48);
+	}
+}
+
 void draw_normal_cr_setting_time(uint32_t ms)
 {
 	lcd_set_back_color(SCREEN_BACK_COLOR);
 	
-	lcd_display_number(CR_SETTING_EDIT_TIME_LEFT, CR_SETTING_TIME_TOP, ms / 1000, TIME_VAL_INTEGER_LEN, ms % 1000 / s_number_divider[TIME_VAL_DECIMAL_LEN], TIME_VAL_DECIMAL_LEN, 
-						false, true, EDITABLE_FORE_COLOR, FONT_48);
+	draw_cr_setting_time(ms);
 }
 
 void draw_focus_cr_setting_time(uint32_t ms)
 {
 	lcd_set_back_color(FOCUS_BACK_COLOR);
 	
-	lcd_display_number(CR_SETTING_EDIT_TIME_LEFT, CR_SETTING_TIME_TOP, ms / 1000, TIME_VAL_INTEGER_LEN, ms % 1000 / s_number_divider[TIME_VAL_DECIMAL_LEN], TIME_VAL_DECIMAL_LEN, 
-						false, true, EDITABLE_FORE_COLOR, FONT_48);	
+	draw_cr_setting_time(ms);
 }
 
 void draw_edit_cr_setting_time(uint32_t ms)
 {
 	lcd_set_back_color(EDIT_BACK_COLOR);
 	
-	lcd_display_number(CR_SETTING_EDIT_TIME_LEFT, CR_SETTING_TIME_TOP, ms / 1000, TIME_VAL_INTEGER_LEN, ms % 1000 / s_number_divider[TIME_VAL_DECIMAL_LEN], TIME_VAL_DECIMAL_LEN, 
-						false, true, EDITABLE_FORE_COLOR, FONT_48);	
+	draw_cr_setting_time(ms);
 }
 
 void draw_normal_cr_setting_ac(uint32_t uA)
@@ -3903,7 +3967,7 @@ void draw_oc_setting_menu(void)
 	lcd_display_ascii_char(OC_SETTING_COLON_LEFT, OC_SETTING_TIME_TOP, ':', RDONLY_FORE_COLOR, FONT_48);
 
 	lcd_display_string(OC_SETTING_TIME_UNIT_LEFT, OC_SETTING_TIME_TOP, str_second, RDONLY_FORE_COLOR, FONT_48);
-
+	
 	/* ac */
 	lcd_display_string(OC_SETTING_AC_LEFT, OC_SETTING_AC_TOP, str_ac_current, RDONLY_FORE_COLOR, FONT_48);
 
@@ -3927,23 +3991,23 @@ void draw_normal_oc_setting_time(uint32_t ms)
 {
 	lcd_set_back_color(SCREEN_BACK_COLOR);
 	
-	lcd_display_number(OC_SETTING_EDIT_TIME_LEFT, OC_SETTING_TIME_TOP, ms / 1000, INTERVAL_VAL_INTEGER_LEN, ms % 1000 / s_number_divider[INTERVAL_VAL_DECIMAL_LEN], INTERVAL_VAL_DECIMAL_LEN, 
-						false, true, EDITABLE_FORE_COLOR, FONT_48);	
+	lcd_display_number(OC_SETTING_EDIT_TIME_LEFT, OC_SETTING_TIME_TOP, ms / 1000, TIME_VAL_INTEGER_LEN, ms % 1000 / s_number_divider[TIME_VAL_DECIMAL_LEN], TIME_VAL_DECIMAL_LEN, 
+						false, true, EDITABLE_FORE_COLOR, FONT_48);
 }
 
 void draw_focus_oc_setting_time(uint32_t ms)
 {
 	lcd_set_back_color(FOCUS_BACK_COLOR);
 	
-	lcd_display_number(OC_SETTING_EDIT_TIME_LEFT, OC_SETTING_TIME_TOP, ms / 1000, INTERVAL_VAL_INTEGER_LEN, ms % 1000 / s_number_divider[INTERVAL_VAL_DECIMAL_LEN], INTERVAL_VAL_DECIMAL_LEN, 
-						false, true, EDITABLE_FORE_COLOR, FONT_48);		
+	lcd_display_number(OC_SETTING_EDIT_TIME_LEFT, OC_SETTING_TIME_TOP, ms / 1000, TIME_VAL_INTEGER_LEN, ms % 1000 / s_number_divider[TIME_VAL_DECIMAL_LEN], TIME_VAL_DECIMAL_LEN, 
+						false, true, EDITABLE_FORE_COLOR, FONT_48);	
 }
 
 void draw_edit_oc_setting_time(uint32_t ms)
 {
 	lcd_set_back_color(EDIT_BACK_COLOR);
 	
-	lcd_display_number(OC_SETTING_EDIT_TIME_LEFT, OC_SETTING_TIME_TOP, ms / 1000, INTERVAL_VAL_INTEGER_LEN, ms % 1000 / s_number_divider[INTERVAL_VAL_DECIMAL_LEN], INTERVAL_VAL_DECIMAL_LEN, 
+	lcd_display_number(OC_SETTING_EDIT_TIME_LEFT, OC_SETTING_TIME_TOP, ms / 1000, TIME_VAL_INTEGER_LEN, ms % 1000 / s_number_divider[TIME_VAL_DECIMAL_LEN], TIME_VAL_DECIMAL_LEN, 
 						false, true, EDITABLE_FORE_COLOR, FONT_48);		
 }
 
@@ -4033,8 +4097,6 @@ void draw_short_setting_menu(void)
 
 	lcd_display_ascii_char(SHORT_SETTING_COLON_LEFT, SHORT_SETTING_TIME_TOP, ':', RDONLY_FORE_COLOR, FONT_48);
 
-	lcd_display_string(SHORT_SETTING_TIME_UNIT_LEFT, SHORT_SETTING_TIME_TOP, str_second, RDONLY_FORE_COLOR, FONT_48);
-
 	/* ac */
 	lcd_display_string(SHORT_SETTING_AC_LEFT, SHORT_SETTING_AC_TOP, str_ac_current, RDONLY_FORE_COLOR, FONT_48);
 
@@ -4054,28 +4116,46 @@ void draw_short_setting_menu(void)
 	lcd_display_ascii_char(SHORT_SETTING_AC_UNIT_LEFT, SHORT_SETTING_SHORT_VAL_TOP, 'A', RDONLY_FORE_COLOR, FONT_48);	
 }
 
+static void draw_short_setting_time(uint32_t ms)
+{
+	if (ms == AUTOMATIC_TIME)
+	{
+		lcd_display_string(SHORT_SETTING_EDIT_TIME_LEFT, SHORT_SETTING_TIME_TOP, str_automatic, EDITABLE_FORE_COLOR, FONT_48);
+
+		lcd_set_back_color(SCREEN_BACK_COLOR);
+		
+		lcd_display_string(SHORT_SETTING_TIME_UNIT_LEFT, SHORT_SETTING_TIME_TOP, "  ", RDONLY_FORE_COLOR, FONT_48);
+	}
+	else
+	{
+		lcd_display_number(SHORT_SETTING_EDIT_TIME_LEFT, SHORT_SETTING_TIME_TOP, ms / 1000, TIME_VAL_INTEGER_LEN, ms % 1000 / s_number_divider[TIME_VAL_DECIMAL_LEN], TIME_VAL_DECIMAL_LEN, 
+						false, true, EDITABLE_FORE_COLOR, FONT_48);
+
+		lcd_set_back_color(SCREEN_BACK_COLOR);
+		
+		lcd_display_string(SHORT_SETTING_TIME_UNIT_LEFT, SHORT_SETTING_TIME_TOP, str_second, RDONLY_FORE_COLOR, FONT_48);
+	}
+}
+
 void draw_normal_short_setting_time(uint32_t ms)
 {
 	lcd_set_back_color(SCREEN_BACK_COLOR);
 	
-	lcd_display_number(SHORT_SETTING_EDIT_TIME_LEFT, SHORT_SETTING_TIME_TOP, ms / 1000, TIME_VAL_INTEGER_LEN, ms % 1000 / s_number_divider[TIME_VAL_DECIMAL_LEN], TIME_VAL_DECIMAL_LEN, 
-						false, true, EDITABLE_FORE_COLOR, FONT_48);		
+	draw_short_setting_time(ms);	
 }
 
 void draw_focus_short_setting_time(uint32_t ms)
 {
 	lcd_set_back_color(FOCUS_BACK_COLOR);
 	
-	lcd_display_number(SHORT_SETTING_EDIT_TIME_LEFT, SHORT_SETTING_TIME_TOP, ms / 1000, TIME_VAL_INTEGER_LEN, ms % 1000 / s_number_divider[TIME_VAL_DECIMAL_LEN], TIME_VAL_DECIMAL_LEN, 
-						false, true, EDITABLE_FORE_COLOR, FONT_48);	
+	draw_short_setting_time(ms);
 }
 
 void draw_edit_short_setting_time(uint32_t ms)
 {
 	lcd_set_back_color(EDIT_BACK_COLOR);
 	
-	lcd_display_number(SHORT_SETTING_EDIT_TIME_LEFT, SHORT_SETTING_TIME_TOP, ms / 1000, TIME_VAL_INTEGER_LEN, ms % 1000 / s_number_divider[TIME_VAL_DECIMAL_LEN], TIME_VAL_DECIMAL_LEN, 
-						false, true, EDITABLE_FORE_COLOR, FONT_48);	
+	draw_short_setting_time(ms);
 }
 
 void draw_normal_short_setting_ac(uint32_t uA)
@@ -4340,6 +4420,8 @@ void draw_factory_menu(void)
 	draw_normal_factory_item_life();
 
 	draw_normal_factory_item_phone();
+
+	draw_normal_factory_item_password();
 }
 
 void draw_normal_factory_item_adjust(void)
@@ -4369,7 +4451,6 @@ void draw_focus_factory_item_privilege(void)
 	
 	lcd_display_string(FACTORY_MENU_ITEM_LEFT, FACTORY_MENU_ITEM_TOP_PRIVILEGE, str_device_privilege, RDONLY_FORE_COLOR, FONT_48);
 }
-
 void draw_normal_factory_item_life(void)
 {
 	lcd_set_back_color(SCREEN_BACK_COLOR);
@@ -4396,6 +4477,20 @@ void draw_focus_factory_item_phone(void)
 	lcd_set_back_color(FOCUS_BACK_COLOR);
 	
 	lcd_display_string(FACTORY_MENU_ITEM_LEFT, FACTORY_MENU_ITEM_TOP_PHONE, str_phone_setting, RDONLY_FORE_COLOR, FONT_48);
+}
+
+void draw_normal_factory_item_password(void)
+{
+	lcd_set_back_color(SCREEN_BACK_COLOR);
+	
+	lcd_display_string(FACTORY_MENU_ITEM_LEFT, FACTORY_MENU_ITEM_TOP_PASSWORD, str_password_setting, RDONLY_FORE_COLOR, FONT_48);
+}
+
+void draw_focus_factory_item_password(void)
+{
+	lcd_set_back_color(FOCUS_BACK_COLOR);
+	
+	lcd_display_string(FACTORY_MENU_ITEM_LEFT, FACTORY_MENU_ITEM_TOP_PASSWORD, str_password_setting, RDONLY_FORE_COLOR, FONT_48);
 }
 
 /* device adjust menu */
@@ -4561,7 +4656,7 @@ void draw_edit_device_adjust_actual_current(uint32_t mA)
 void draw_device_privilege_menu(void)
 {
 	/* caption */
-	lcd_display_string(DEVICE_PRIVILEGE_CAPTION_LEFT, DEVICE_PRIVILEGE_CAPTION_TOP, str_device_privilege_caption, 
+	lcd_display_string(DEVICE_PRIVILEGE_CAPTION_LEFT, DEVICE_PRIVILEGE_CAPTION_TOP, str_device_privilege, 
 						CAPTION_COLOR, FONT_64);
 	
 	lcd_display_string(QC20_ON_OFF_LEFT, QC20_ON_OFF_TOP, str_QC20_test, 
@@ -4645,7 +4740,7 @@ void draw_edit_MTK_item(OPTION_ON_OFF on_off)
 void draw_life_limit_menu(void)
 {
 	/* caption */
-	lcd_display_string(LIFE_LIMIT_CAPTION_LEFT, LIFE_LIMIT_CAPTION_TOP, str_life_limit_caption, 
+	lcd_display_string(LIFE_LIMIT_CAPTION_LEFT, LIFE_LIMIT_CAPTION_TOP, str_life_limit, 
 						CAPTION_COLOR, FONT_64);
 	
 	/* power on count setting */
@@ -4836,7 +4931,7 @@ void draw_normal_life_actual_count_item(uint32_t integer)
 void draw_phone_setting_menu(void)
 {
 	/* caption */
-	lcd_display_string(PHONE_SETTING_CAPTION_LEFT, PHONE_SETTING_CAPTION_TOP, str_phone_setting_caption, 
+	lcd_display_string(PHONE_SETTING_CAPTION_LEFT, PHONE_SETTING_CAPTION_TOP, str_phone_setting, 
 						CAPTION_COLOR, FONT_64);
 	
 	/* default number */
@@ -5035,3 +5130,97 @@ void draw_normal_phone_setting_actual_customer_power_on_count(uint32_t integer)
 						integer, POWER_ON_COUNT_VAL_INTEGER_LEN, 0, 0, false, true, RDONLY_FORE_COLOR, FONT_48);	
 }
 
+
+/* password setting menu */
+void draw_password_setting_menu(void)
+{
+	/* caption */
+	lcd_display_string(PASSWORD_SETTING_CAPTION_LEFT, PASSWORD_SETTING_CAPTION_TOP, str_password_setting, 
+						CAPTION_COLOR, FONT_64);
+	
+	/* password */
+	lcd_display_string(PASSWORD_SETTING_LEFT, PASSWORD_SETTING_TOP, str_password, RDONLY_FORE_COLOR, FONT_48);
+	lcd_display_ascii_char(PASSWORD_SETTING_COLON_LEFT, PASSWORD_SETTING_TOP, ':', RDONLY_FORE_COLOR, FONT_48);
+}
+
+void enter_edit_password(const PASSWORD *password)
+{
+	number_literal_enter_edit_mode(PASSWORD_EDIT_LEFT, PASSWORD_EDIT_TOP, password->password, sizeof(password->password), FONT_48);
+}
+
+void get_edit_password(PASSWORD *password)
+{
+	literal_string_to_number(password->password, sizeof(password->password), s_edit_buffer, sizeof(s_edit_buffer));
+}
+
+void increase_edit_password_digit(void)
+{
+	number_digit_increase(PASSWORD_EDIT_LEFT, PASSWORD_EDIT_TOP, FONT_48);
+}
+
+void decrease_edit_password_digit(void)
+{
+	number_digit_decrease(PASSWORD_EDIT_LEFT, PASSWORD_EDIT_TOP, FONT_48);
+}
+
+void move_prev_edit_password_digit(void)
+{
+	number_prev_digit(PASSWORD_EDIT_LEFT, PASSWORD_EDIT_TOP, FONT_48);
+}
+
+void move_next_edit_password_digit(void)
+{
+	number_next_digit(PASSWORD_EDIT_LEFT, PASSWORD_EDIT_TOP, FONT_48);
+}
+
+
+/* password menu */
+void draw_password_menu(void)
+{
+	/* caption */
+	lcd_display_string(PASSWORD_SETTING_CAPTION_LEFT, PASSWORD_SETTING_CAPTION_TOP, str_input_password, 
+						CAPTION_COLOR, FONT_64);
+}
+
+
+void draw_focus_password_setting_password(const PASSWORD *password)
+{
+	char pwd[PASSWORD_LEN + 1];
+	rt_memcpy(pwd, password->password, PASSWORD_LEN);
+	pwd[PASSWORD_LEN] = '\0';
+	
+	lcd_set_back_color(FOCUS_BACK_COLOR);
+	
+	lcd_display_string(PASSWORD_SETTING_PASSWORD_EDIT_LEFT, PASSWORD_SETTING_TOP, pwd, EDITABLE_FORE_COLOR, FONT_48); 
+}
+
+
+void enter_edit_password_setting_password(const PASSWORD *password)
+{
+	number_literal_enter_edit_mode(PASSWORD_SETTING_PASSWORD_EDIT_LEFT, PASSWORD_SETTING_TOP, password->password, sizeof(password->password), FONT_48);
+}
+
+void get_edit_password_setting_password(PASSWORD *password)
+{
+	literal_string_to_number(password->password, sizeof(password->password), s_edit_buffer, sizeof(s_edit_buffer));
+}
+
+void increase_edit_password_setting_password_digit(void)
+{
+	number_digit_increase(PASSWORD_SETTING_PASSWORD_EDIT_LEFT, PASSWORD_SETTING_TOP, FONT_48);
+}
+
+void decrease_edit_password_setting_password_digit(void)
+{
+	number_digit_decrease(PASSWORD_SETTING_PASSWORD_EDIT_LEFT, PASSWORD_SETTING_TOP, FONT_48);
+}
+
+void move_prev_edit_password_setting_password_digit(void)
+{
+	number_prev_digit(PASSWORD_SETTING_PASSWORD_EDIT_LEFT, PASSWORD_SETTING_TOP, FONT_48);
+}
+
+void move_next_edit_password_setting_password_digit(void)
+{
+	number_next_digit(PASSWORD_SETTING_PASSWORD_EDIT_LEFT, PASSWORD_SETTING_TOP, FONT_48);
+}

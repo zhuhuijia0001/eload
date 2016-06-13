@@ -43,7 +43,7 @@ static void key_handler(void *msg)
 		/* verify */
 		if (is_factory_mode_activated())
 		{
-			switch_to_menu(MENU_ID_FACTORY_MODE);
+			switch_to_menu(MENU_ID_PASSWORD);
 		}
 		else
 		{

@@ -10,3 +10,4 @@ extern void process_cur_menu_msg(MSG_ID id, void *msg);
 extern void init_menu(void);
 
 #endif
+

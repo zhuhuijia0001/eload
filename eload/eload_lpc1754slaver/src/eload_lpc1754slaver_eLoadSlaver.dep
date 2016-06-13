@@ -1,5 +1,5 @@
 Dependencies for Project 'eload_lpc1754slaver', Target 'eLoadSlaver': (DO NOT MODIFY !)
-F (.\app\application.c)(0x574ABDDF)(--c99 -c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork --signed_chars -I.\app -I.\bsp -I.\dev -I.\cfg -I.\thread -I.\rtos\include -I.\LPC17XX_Lib\Driver\include -I.\LPC17XX_Lib\CMSIS\CoreSupport -I.\LPC17XX_Lib\CMSIS\DeviceSupport-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\NXP\LPC17xx-D__BUILD_WITH_EXAMPLE__-o .\build\application.o --omf_browse .\build\application.crf --depend .\build\application.d)
+F (.\app\application.c)(0x575BF3DC)(--c99 -c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork --signed_chars -I.\app -I.\bsp -I.\dev -I.\cfg -I.\thread -I.\rtos\include -I.\LPC17XX_Lib\Driver\include -I.\LPC17XX_Lib\CMSIS\CoreSupport -I.\LPC17XX_Lib\CMSIS\DeviceSupport-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\NXP\LPC17xx-D__BUILD_WITH_EXAMPLE__-o .\build\application.o --omf_browse .\build\application.crf --depend .\build\application.d)
 I (.\rtos\include\rtthread.h)(0x5343AAEC)
 I (.\cfg\rtconfig.h)(0x574AAB2B)
 I (.\rtos\include\rtdebug.h)(0x53438822)
@@ -20,7 +20,7 @@ I (app\parameter.h)(0x572CBC98)
 I (app\app_cfg.h)(0x57409529)
 I (app\global.h)(0x574AD3C4)
 I (app\packet.h)(0x574AD36E)
-I (app\protocol.h)(0x573DDCC6)
+I (app\protocol.h)(0x5753750C)
 I (.\thread\work_thread.h)(0x57248AE1)
 I (.\thread\com_thread.h)(0x56A227EA)
 F (.\app\platform.c)(0x534387AA)(--c99 -c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork --signed_chars -I.\app -I.\bsp -I.\dev -I.\cfg -I.\thread -I.\rtos\include -I.\LPC17XX_Lib\Driver\include -I.\LPC17XX_Lib\CMSIS\CoreSupport -I.\LPC17XX_Lib\CMSIS\DeviceSupport-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\NXP\LPC17xx-D__BUILD_WITH_EXAMPLE__-o .\build\platform.o --omf_browse .\build\platform.crf --depend .\build\platform.d)
@@ -49,8 +49,8 @@ F (.\app\packet.h)(0x574AD36E)()
 F (.\app\packet.c)(0x57275723)(--c99 -c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork --signed_chars -I.\app -I.\bsp -I.\dev -I.\cfg -I.\thread -I.\rtos\include -I.\LPC17XX_Lib\Driver\include -I.\LPC17XX_Lib\CMSIS\CoreSupport -I.\LPC17XX_Lib\CMSIS\DeviceSupport-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\NXP\LPC17xx-D__BUILD_WITH_EXAMPLE__-o .\build\packet.o --omf_browse .\build\packet.crf --depend .\build\packet.d)
 I (C:\Keil\ARM\ARMCC\include\stdint.h)(0x51C7C554)
 I (app\packet.h)(0x574AD36E)
-I (app\protocol.h)(0x573DDCC6)
-F (.\app\protocol.h)(0x573DDCC6)()
+I (app\protocol.h)(0x5753750C)
+F (.\app\protocol.h)(0x5753750C)()
 F (.\app\global.h)(0x574AD3C4)()
 F (.\app\global.c)(0x57249007)(--c99 -c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork --signed_chars -I.\app -I.\bsp -I.\dev -I.\cfg -I.\thread -I.\rtos\include -I.\LPC17XX_Lib\Driver\include -I.\LPC17XX_Lib\CMSIS\CoreSupport -I.\LPC17XX_Lib\CMSIS\DeviceSupport-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\NXP\LPC17xx-D__BUILD_WITH_EXAMPLE__-o .\build\global.o --omf_browse .\build\global.crf --depend .\build\global.d)
 I (.\rtos\include\rtthread.h)(0x5343AAEC)
@@ -61,7 +61,7 @@ I (C:\Keil\ARM\ARMCC\include\stdarg.h)(0x51C7C554)
 I (.\rtos\include\rtservice.h)(0x53438822)
 I (.\rtos\include\rtm.h)(0x53438822)
 I (C:\Keil\ARM\ARMCC\include\stdint.h)(0x51C7C554)
-I (app\protocol.h)(0x573DDCC6)
+I (app\protocol.h)(0x5753750C)
 I (app\global.h)(0x574AD3C4)
 I (app\packet.h)(0x574AD36E)
 F (.\app\parameter.c)(0x572CBCF0)(--c99 -c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork --signed_chars -I.\app -I.\bsp -I.\dev -I.\cfg -I.\thread -I.\rtos\include -I.\LPC17XX_Lib\Driver\include -I.\LPC17XX_Lib\CMSIS\CoreSupport -I.\LPC17XX_Lib\CMSIS\DeviceSupport-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\NXP\LPC17xx-D__BUILD_WITH_EXAMPLE__-o .\build\parameter.o --omf_browse .\build\parameter.crf --depend .\build\parameter.d)
@@ -71,7 +71,7 @@ I (app\parameter.h)(0x572CBC98)
 I (.\bsp\eeprom.h)(0x564C8D92)
 F (.\app\parameter.h)(0x572CBC98)()
 F (.\bsp\board.h)(0x534387AA)()
-F (.\bsp\board.c)(0x5662781D)(--c99 -c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork --signed_chars -I.\app -I.\bsp -I.\dev -I.\cfg -I.\thread -I.\rtos\include -I.\LPC17XX_Lib\Driver\include -I.\LPC17XX_Lib\CMSIS\CoreSupport -I.\LPC17XX_Lib\CMSIS\DeviceSupport-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\NXP\LPC17xx-D__BUILD_WITH_EXAMPLE__-o .\build\board.o --omf_browse .\build\board.crf --depend .\build\board.d)
+F (.\bsp\board.c)(0x5756F54E)(--c99 -c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork --signed_chars -I.\app -I.\bsp -I.\dev -I.\cfg -I.\thread -I.\rtos\include -I.\LPC17XX_Lib\Driver\include -I.\LPC17XX_Lib\CMSIS\CoreSupport -I.\LPC17XX_Lib\CMSIS\DeviceSupport-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\NXP\LPC17xx-D__BUILD_WITH_EXAMPLE__-o .\build\board.o --omf_browse .\build\board.crf --depend .\build\board.d)
 I (.\rtos\include\rthw.h)(0x53438822)
 I (.\rtos\include\rtthread.h)(0x5343AAEC)
 I (.\cfg\rtconfig.h)(0x574AAB2B)
@@ -152,7 +152,7 @@ I (C:\Keil\ARM\ARMCC\include\stdint.h)(0x51C7C554)
 I (.\dev\dev_uart.h)(0x56702A16)
 I (bsp\com_port.h)(0x56A24BD5)
 I (.\app\packet.h)(0x574AD36E)
-I (.\app\protocol.h)(0x573DDCC6)
+I (.\app\protocol.h)(0x5753750C)
 F (.\bsp\24Cxx.c)(0x5613E460)(--c99 -c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork --signed_chars -I.\app -I.\bsp -I.\dev -I.\cfg -I.\thread -I.\rtos\include -I.\LPC17XX_Lib\Driver\include -I.\LPC17XX_Lib\CMSIS\CoreSupport -I.\LPC17XX_Lib\CMSIS\DeviceSupport-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\NXP\LPC17xx-D__BUILD_WITH_EXAMPLE__-o .\build\24cxx.o --omf_browse .\build\24cxx.crf --depend .\build\24cxx.d)
 I (.\app\type.h)(0x561364F3)
 I (.\LPC17XX_Lib\Driver\include\lpc17xx_i2c.h)(0x53731E8A)
@@ -776,7 +776,7 @@ I (.\rtos\include\rtm.h)(0x53438822)
 I (.\app\type.h)(0x561364F3)
 I (dev\dev_eeprom.h)(0x56147B80)
 I (.\bsp\24Cxx.h)(0x56137343)
-F (.\thread\com_thread.c)(0x574AD3C6)(--c99 -c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork --signed_chars -I.\app -I.\bsp -I.\dev -I.\cfg -I.\thread -I.\rtos\include -I.\LPC17XX_Lib\Driver\include -I.\LPC17XX_Lib\CMSIS\CoreSupport -I.\LPC17XX_Lib\CMSIS\DeviceSupport-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\NXP\LPC17xx-D__BUILD_WITH_EXAMPLE__-o .\build\com_thread.o --omf_browse .\build\com_thread.crf --depend .\build\com_thread.d)
+F (.\thread\com_thread.c)(0x57530446)(--c99 -c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork --signed_chars -I.\app -I.\bsp -I.\dev -I.\cfg -I.\thread -I.\rtos\include -I.\LPC17XX_Lib\Driver\include -I.\LPC17XX_Lib\CMSIS\CoreSupport -I.\LPC17XX_Lib\CMSIS\DeviceSupport-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\NXP\LPC17xx-D__BUILD_WITH_EXAMPLE__-o .\build\com_thread.o --omf_browse .\build\com_thread.crf --depend .\build\com_thread.d)
 I (.\rtos\include\rtthread.h)(0x5343AAEC)
 I (.\cfg\rtconfig.h)(0x574AAB2B)
 I (.\rtos\include\rtdebug.h)(0x53438822)
@@ -787,7 +787,7 @@ I (.\rtos\include\rtm.h)(0x53438822)
 I (C:\Keil\ARM\ARMCC\include\stdint.h)(0x51C7C554)
 I (.\app\type.h)(0x561364F3)
 I (.\app\packet.h)(0x574AD36E)
-I (.\app\protocol.h)(0x573DDCC6)
+I (.\app\protocol.h)(0x5753750C)
 I (.\app\app_cfg.h)(0x57409529)
 I (.\bsp\com_port.h)(0x56A24BD5)
 I (.\app\parameter.h)(0x572CBC98)
@@ -795,7 +795,7 @@ I (.\app\global.h)(0x574AD3C4)
 I (thread\com_thread.h)(0x56A227EA)
 I (.\app\trace.h)(0x5621131F)
 F (.\thread\com_thread.h)(0x56A227EA)()
-F (.\thread\work_thread.c)(0x574AD4DF)(--c99 -c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork --signed_chars -I.\app -I.\bsp -I.\dev -I.\cfg -I.\thread -I.\rtos\include -I.\LPC17XX_Lib\Driver\include -I.\LPC17XX_Lib\CMSIS\CoreSupport -I.\LPC17XX_Lib\CMSIS\DeviceSupport-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\NXP\LPC17xx-D__BUILD_WITH_EXAMPLE__-o .\build\work_thread.o --omf_browse .\build\work_thread.crf --depend .\build\work_thread.d)
+F (.\thread\work_thread.c)(0x575BF60C)(--c99 -c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork --signed_chars -I.\app -I.\bsp -I.\dev -I.\cfg -I.\thread -I.\rtos\include -I.\LPC17XX_Lib\Driver\include -I.\LPC17XX_Lib\CMSIS\CoreSupport -I.\LPC17XX_Lib\CMSIS\DeviceSupport-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\NXP\LPC17xx-D__BUILD_WITH_EXAMPLE__-o .\build\work_thread.o --omf_browse .\build\work_thread.crf --depend .\build\work_thread.d)
 I (.\rtos\include\rtthread.h)(0x5343AAEC)
 I (.\cfg\rtconfig.h)(0x574AAB2B)
 I (.\rtos\include\rtdebug.h)(0x53438822)
@@ -809,7 +809,7 @@ I (.\bsp\control.h)(0x571B508E)
 I (.\bsp\relay.h)(0x574ACD51)
 I (.\bsp\meter.h)(0x56DBECB9)
 I (.\app\trace.h)(0x5621131F)
-I (.\app\protocol.h)(0x573DDCC6)
+I (.\app\protocol.h)(0x5753750C)
 I (.\app\app_cfg.h)(0x57409529)
 I (.\app\global.h)(0x574AD3C4)
 I (.\app\packet.h)(0x574AD36E)

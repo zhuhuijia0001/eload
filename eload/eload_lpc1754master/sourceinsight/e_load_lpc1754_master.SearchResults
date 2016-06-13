@@ -1,0 +1,5 @@
+---- NVIC_SetPriority Matches (4 in 2 files) ----
+Board.c (bsp):	NVIC_SetPriority(PendSV_IRQn, (1 << __NVIC_PRIO_BITS) - 1);
+Core_cm3.h (lpc17xx_lib\cmsis\coresupport):static __INLINE void NVIC_SetPriority(IRQn_Type IRQn, uint32_t priority)
+Core_cm3.h (lpc17xx_lib\cmsis\coresupport):    The returned priority value can be used for NVIC_SetPriority(...) function
+Core_cm3.h (lpc17xx_lib\cmsis\coresupport):  NVIC_SetPriority (SysTick_IRQn, (1<<__NVIC_PRIO_BITS) - 1);  /* set Priority for Cortex-M0 System Interrupts */

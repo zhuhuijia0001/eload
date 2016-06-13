@@ -16,10 +16,16 @@
 typedef enum
 {
 	KEY_STATUS_IDLE = 0,
-	KEY_STATUS_BOUND = 1,
-	KEY_STATUS_PRESS = 2,
-	KEY_STATUS_LONG  = 3,
-	KEY_STATUS_CONTINUE = 4,
+	
+	KEY_STATUS_BOUND,
+	
+	KEY_STATUS_PRESS,
+	
+	KEY_STATUS_LONG,
+	
+	KEY_STATUS_CONTINUE,
+
+	KEY_STATUS_RELEASE_BOUND,
 	
 	KEY_STATUS_LAST
 } KEY_STATUS;
@@ -32,6 +38,8 @@ typedef enum
 #define KEY_CONTINUE_CHECK_COUNT (300 / KEY_TIMER_INTERVAL)
 #define KEY_CONTINUE_DELTA_COUNT (100 / KEY_TIMER_INTERVAL)
 #define KEY_CONTINUE_BASE_COUNT  (100 / KEY_TIMER_INTERVAL)
+
+#define KEY_RELEASE_CHECK_COUNT  (20 / KEY_TIMER_INTERVAL)
 
 typedef struct _KEY_CHECK
 {
@@ -234,6 +242,18 @@ static key_t key_check(rt_uint8_t keyNo)
 			}
 				
 			break;
+
+		case KEY_STATUS_RELEASE_BOUND:
+			pKeyCheck->count--;
+			if (pKeyCheck->count == 0)
+			{
+				pKeyCheck->keyStatus = KEY_STATUS_CONTINUE;
+					
+				pKeyCheck->count = 0;
+				pKeyCheck->continueCount = KEY_CONTINUE_CHECK_COUNT;
+			}
+
+			break;
 			
 		default:
 			break;
@@ -241,14 +261,43 @@ static key_t key_check(rt_uint8_t keyNo)
 	}
 	else
 	{
-		if (pKeyCheck->keyStatus != KEY_STATUS_IDLE && pKeyCheck->keyStatus != KEY_STATUS_BOUND)
+		switch (pKeyCheck->keyStatus)
 		{
-			key = pKeyCheck->targetKey | MASK_KEY_RELEASE;
+		case KEY_STATUS_BOUND:
+			pKeyCheck->count--;
+			if (pKeyCheck->count == 0)
+			{
+				pKeyCheck->continueCount = KEY_CONTINUE_CHECK_COUNT;
+				pKeyCheck->keyStatus = KEY_STATUS_IDLE;
+			}
+
+			break;
+
+		case KEY_STATUS_RELEASE_BOUND:
+			pKeyCheck->count--;
+			if (pKeyCheck->count == 0)
+			{
+				key = pKeyCheck->targetKey | MASK_KEY_RELEASE;
+						
+				pKeyCheck->keyStatus = KEY_STATUS_IDLE;
+					
+				pKeyCheck->count = 0;
+				pKeyCheck->continueCount = KEY_CONTINUE_CHECK_COUNT;
+			}
+
+			break;
+
+		case KEY_STATUS_PRESS:
+
+		case KEY_STATUS_LONG:
+
+		case KEY_STATUS_CONTINUE:
+			pKeyCheck->keyStatus = KEY_STATUS_RELEASE_BOUND;
+				
+			pKeyCheck->count = KEY_RELEASE_CHECK_COUNT;
+
+			break;
 		}
-			
-		pKeyCheck->count = 0;
-		pKeyCheck->continueCount = KEY_CONTINUE_CHECK_COUNT;
-		pKeyCheck->keyStatus = KEY_STATUS_IDLE;
 	}
 
 	return key;
@@ -262,6 +311,7 @@ static void timer_callback(void *parameter)
 	rt_ubase_t level;
 	
 	struct dev_key *dev_key = (struct dev_key *)parameter;
+	RT_ASSERT(dev_key != RT_NULL);
 	
 	for (i = 0; i < KEY_NUM; i++)
 	{

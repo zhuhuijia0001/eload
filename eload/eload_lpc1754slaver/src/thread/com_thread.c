@@ -27,6 +27,9 @@ static void packet_receive_callback(uint8_t *payload, uint16_t payload_size)
 	rt_mq_send(s_payload_queue, payload, payload_size);
 }
 
+/* ac offset value */
+static uint32_t s_ac_offset_value = 0;
+
 static void com_thread_entry(void *parameter)
 {
 	rt_err_t ret;
@@ -359,13 +362,20 @@ static void com_thread_entry(void *parameter)
 				rt_sem_take(g_sem_test_content, RT_WAITING_FOREVER);
 
 				if (g_test_content.test_type == TEST_TYPE_OVER_CURRENT_TEST
-					&& g_test_content.test_status == TEST_STATUS_IDLE)
+					&& g_test_content.test_status == TEST_STATUS_NORMAL)
 				{
 					current = g_over_current_test_result.over_current_test_current;
 
 					voltage = g_over_current_test_result.over_current_test_voltage;
 
-					ac = g_over_current_test_result.over_current_test_ac;
+					if (g_over_current_test_result.over_current_test_ac > s_ac_offset_value)
+					{
+						ac = g_over_current_test_result.over_current_test_ac - s_ac_offset_value;
+					}
+					else
+					{
+						ac = 0;
+					}
 				}
 				else
 				{
@@ -373,7 +383,14 @@ static void com_thread_entry(void *parameter)
 
 					voltage = g_test_content.voltage;
 
-					ac      = g_test_content.ac_current;
+					if (g_test_content.ac_current > s_ac_offset_value)
+					{
+						ac = g_test_content.ac_current - s_ac_offset_value;
+					}
+					else
+					{
+						ac = 0;
+					}
 				}
 				
 				test_type   = g_test_content.test_type;
@@ -416,6 +433,18 @@ static void com_thread_entry(void *parameter)
 							ADJUST_PARAMETER.measure_voltage, ADJUST_PARAMETER.actual_voltage, ADJUST_PARAMETER.measure_current, ADJUST_PARAMETER.actual_current);
 				}
 
+				RT_ASSERT(g_sem_test_content != RT_NULL);
+				
+				rt_sem_take(g_sem_test_content, RT_WAITING_FOREVER);
+				s_ac_offset_value = g_test_content.ac_current;
+				rt_sem_release(g_sem_test_content);
+
+				/* notify work thread */
+				test_cmd.test_type     = TEST_TYPE_NONE;
+					
+				RT_ASSERT(g_test_cmd_queue != RT_NULL);
+				rt_mq_send(g_test_cmd_queue, &test_cmd, sizeof(test_cmd));
+				
 				break;
 				
 			default:

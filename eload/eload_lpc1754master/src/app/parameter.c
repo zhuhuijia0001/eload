@@ -10,11 +10,6 @@
 static const char *PARAM_FILE_NAME = "param.dat";
 
 /* default parameters */
-static const uint32_t s_default_cv_mode_voltage_set = 5000ul;
-	
-static const uint32_t s_default_cc_mode_current_set = 300ul;
-
-static const uint32_t s_default_cr_mode_resist_set = 100000ul;
 	
 static const SYNTH_TEST_SETTING s_default_synth_test_setting = 
 {
@@ -101,7 +96,7 @@ static const SYNTH_TEST_SETTING s_default_synth_test_setting =
 
 				.ac_limit = 100000ul,
 
-				.cr_val = 100000ul,
+				.cr_val = 50000ul,
 
 				.current_from = 100ul,
 
@@ -169,7 +164,7 @@ static const SYNTH_TEST_SETTING s_default_synth_test_setting =
 
 				.ac_limit = 100000ul,
 
-				.cr_val = 100000ul,
+				.cr_val = 50000ul,
 
 				.current_from = 100ul,
 
@@ -237,7 +232,7 @@ static const SYNTH_TEST_SETTING s_default_synth_test_setting =
 
 				.ac_limit = 100000ul,
 
-				.cr_val = 100000ul,
+				.cr_val = 50000ul,
 
 				.current_from = 100ul,
 
@@ -305,7 +300,7 @@ static const SYNTH_TEST_SETTING s_default_synth_test_setting =
 
 				.ac_limit = 100000ul,
 
-				.cr_val = 100000ul,
+				.cr_val = 50000ul,
 
 				.current_from = 100ul,
 
@@ -373,7 +368,7 @@ static const SYNTH_TEST_SETTING s_default_synth_test_setting =
 
 				.ac_limit = 100000ul,
 
-				.cr_val = 100000ul,
+				.cr_val = 50000ul,
 
 				.current_from = 100ul,
 
@@ -441,7 +436,7 @@ static const SYNTH_TEST_SETTING s_default_synth_test_setting =
 
 				.ac_limit = 100000ul,
 
-				.cr_val = 100000ul,
+				.cr_val = 50000ul,
 
 				.current_from = 100ul,
 
@@ -568,7 +563,7 @@ static const QC_20_TEST_SETTING s_default_qc_20_test_setting =
 
 			.ac_limit = 100000ul,
 
-			.cr_val = 100000ul,
+			.cr_val = 50000ul,
 
 			.current_from = 100ul,
 
@@ -629,7 +624,7 @@ static const QC_20_TEST_SETTING s_default_qc_20_test_setting =
 
 			.ac_limit = 100000ul,
 
-			.cr_val = 100000ul,
+			.cr_val = 50000ul,
 
 			.current_from = 100ul,
 
@@ -690,7 +685,7 @@ static const QC_20_TEST_SETTING s_default_qc_20_test_setting =
 
 			.ac_limit = 100000ul,
 
-			.cr_val = 100000ul,
+			.cr_val = 50000ul,
 
 			.current_from = 100ul,
 
@@ -751,7 +746,7 @@ static const QC_20_TEST_SETTING s_default_qc_20_test_setting =
 
 			.ac_limit = 100000ul,
 
-			.cr_val = 100000ul,
+			.cr_val = 50000ul,
 
 			.current_from = 100ul,
 
@@ -819,7 +814,7 @@ static const QC_20_TEST_SETTING s_default_qc_20_test_setting =
 
 			.ac_limit = 100000ul,
 
-			.cr_val = 100000ul,
+			.cr_val = 50000ul,
 
 			.current_from = 100ul,
 
@@ -880,7 +875,7 @@ static const QC_20_TEST_SETTING s_default_qc_20_test_setting =
 
 			.ac_limit = 100000ul,
 
-			.cr_val = 100000ul,
+			.cr_val = 50000ul,
 
 			.current_from = 100ul,
 
@@ -941,7 +936,7 @@ static const QC_20_TEST_SETTING s_default_qc_20_test_setting =
 
 			.ac_limit = 100000ul,
 
-			.cr_val = 100000ul,
+			.cr_val = 50000ul,
 
 			.current_from = 100ul,
 
@@ -1002,7 +997,7 @@ static const QC_20_TEST_SETTING s_default_qc_20_test_setting =
 
 			.ac_limit = 100000ul,
 
-			.cr_val = 100000ul,
+			.cr_val = 50000ul,
 
 			.current_from = 100ul,
 
@@ -1070,7 +1065,7 @@ static const QC_20_TEST_SETTING s_default_qc_20_test_setting =
 
 			.ac_limit = 100000ul,
 
-			.cr_val = 100000ul,
+			.cr_val = 50000ul,
 
 			.current_from = 100ul,
 
@@ -1131,7 +1126,7 @@ static const QC_20_TEST_SETTING s_default_qc_20_test_setting =
 
 			.ac_limit = 100000ul,
 
-			.cr_val = 100000ul,
+			.cr_val = 50000ul,
 
 			.current_from = 100ul,
 
@@ -1192,7 +1187,7 @@ static const QC_20_TEST_SETTING s_default_qc_20_test_setting =
 
 			.ac_limit = 100000ul,
 
-			.cr_val = 100000ul,
+			.cr_val = 50000ul,
 
 			.current_from = 100ul,
 
@@ -1253,7 +1248,7 @@ static const QC_20_TEST_SETTING s_default_qc_20_test_setting =
 
 			.ac_limit = 100000ul,
 
-			.cr_val = 100000ul,
+			.cr_val = 50000ul,
 
 			.current_from = 100ul,
 
@@ -1321,7 +1316,7 @@ static const QC_20_TEST_SETTING s_default_qc_20_test_setting =
 
 			.ac_limit = 100000ul,
 
-			.cr_val = 100000ul,
+			.cr_val = 50000ul,
 
 			.current_from = 100ul,
 
@@ -1382,7 +1377,7 @@ static const QC_20_TEST_SETTING s_default_qc_20_test_setting =
 
 			.ac_limit = 100000ul,
 
-			.cr_val = 100000ul,
+			.cr_val = 50000ul,
 
 			.current_from = 100ul,
 
@@ -1443,7 +1438,7 @@ static const QC_20_TEST_SETTING s_default_qc_20_test_setting =
 
 			.ac_limit = 100000ul,
 
-			.cr_val = 100000ul,
+			.cr_val = 50000ul,
 
 			.current_from = 100ul,
 
@@ -1504,7 +1499,7 @@ static const QC_20_TEST_SETTING s_default_qc_20_test_setting =
 
 			.ac_limit = 100000ul,
 
-			.cr_val = 100000ul,
+			.cr_val = 50000ul,
 
 			.current_from = 100ul,
 
@@ -1572,7 +1567,7 @@ static const QC_20_TEST_SETTING s_default_qc_20_test_setting =
 
 			.ac_limit = 100000ul,
 
-			.cr_val = 100000ul,
+			.cr_val = 50000ul,
 
 			.current_from = 100ul,
 
@@ -1633,7 +1628,7 @@ static const QC_20_TEST_SETTING s_default_qc_20_test_setting =
 
 			.ac_limit = 100000ul,
 
-			.cr_val = 100000ul,
+			.cr_val = 50000ul,
 
 			.current_from = 100ul,
 
@@ -1694,7 +1689,7 @@ static const QC_20_TEST_SETTING s_default_qc_20_test_setting =
 
 			.ac_limit = 100000ul,
 
-			.cr_val = 100000ul,
+			.cr_val = 50000ul,
 
 			.current_from = 100ul,
 
@@ -1755,7 +1750,7 @@ static const QC_20_TEST_SETTING s_default_qc_20_test_setting =
 
 			.ac_limit = 100000ul,
 
-			.cr_val = 100000ul,
+			.cr_val = 50000ul,
 
 			.current_from = 100ul,
 
@@ -1823,7 +1818,7 @@ static const QC_20_TEST_SETTING s_default_qc_20_test_setting =
 
 			.ac_limit = 100000ul,
 
-			.cr_val = 100000ul,
+			.cr_val = 50000ul,
 
 			.current_from = 100ul,
 
@@ -1884,7 +1879,7 @@ static const QC_20_TEST_SETTING s_default_qc_20_test_setting =
 
 			.ac_limit = 100000ul,
 
-			.cr_val = 100000ul,
+			.cr_val = 50000ul,
 
 			.current_from = 100ul,
 
@@ -1945,7 +1940,7 @@ static const QC_20_TEST_SETTING s_default_qc_20_test_setting =
 
 			.ac_limit = 100000ul,
 
-			.cr_val = 100000ul,
+			.cr_val = 50000ul,
 
 			.current_from = 100ul,
 
@@ -2006,7 +2001,7 @@ static const QC_20_TEST_SETTING s_default_qc_20_test_setting =
 
 			.ac_limit = 100000ul,
 
-			.cr_val = 100000ul,
+			.cr_val = 50000ul,
 
 			.current_from = 100ul,
 
@@ -2133,7 +2128,7 @@ static const MTK_TEST_SETTING s_default_mtk_test_setting =
 
 			.ac_limit = 100000ul,
 
-			.cr_val = 100000ul,
+			.cr_val = 50000ul,
 
 			.current_from = 100ul,
 
@@ -2194,7 +2189,7 @@ static const MTK_TEST_SETTING s_default_mtk_test_setting =
 
 			.ac_limit = 100000ul,
 
-			.cr_val = 100000ul,
+			.cr_val = 50000ul,
 
 			.current_from = 100ul,
 
@@ -2255,7 +2250,7 @@ static const MTK_TEST_SETTING s_default_mtk_test_setting =
 
 			.ac_limit = 100000ul,
 
-			.cr_val = 100000ul,
+			.cr_val = 50000ul,
 
 			.current_from = 100ul,
 
@@ -2316,7 +2311,7 @@ static const MTK_TEST_SETTING s_default_mtk_test_setting =
 
 			.ac_limit = 100000ul,
 
-			.cr_val = 100000ul,
+			.cr_val = 50000ul,
 
 			.current_from = 100ul,
 
@@ -2384,7 +2379,7 @@ static const MTK_TEST_SETTING s_default_mtk_test_setting =
 
 			.ac_limit = 100000ul,
 
-			.cr_val = 100000ul,
+			.cr_val = 50000ul,
 
 			.current_from = 100ul,
 
@@ -2445,7 +2440,7 @@ static const MTK_TEST_SETTING s_default_mtk_test_setting =
 
 			.ac_limit = 100000ul,
 
-			.cr_val = 100000ul,
+			.cr_val = 50000ul,
 
 			.current_from = 100ul,
 
@@ -2506,7 +2501,7 @@ static const MTK_TEST_SETTING s_default_mtk_test_setting =
 
 			.ac_limit = 100000ul,
 
-			.cr_val = 100000ul,
+			.cr_val = 50000ul,
 
 			.current_from = 100ul,
 
@@ -2567,7 +2562,7 @@ static const MTK_TEST_SETTING s_default_mtk_test_setting =
 
 			.ac_limit = 100000ul,
 
-			.cr_val = 100000ul,
+			.cr_val = 50000ul,
 
 			.current_from = 100ul,
 
@@ -2635,7 +2630,7 @@ static const MTK_TEST_SETTING s_default_mtk_test_setting =
 
 			.ac_limit = 100000ul,
 
-			.cr_val = 100000ul,
+			.cr_val = 50000ul,
 
 			.current_from = 100ul,
 
@@ -2696,7 +2691,7 @@ static const MTK_TEST_SETTING s_default_mtk_test_setting =
 
 			.ac_limit = 100000ul,
 
-			.cr_val = 100000ul,
+			.cr_val = 50000ul,
 
 			.current_from = 100ul,
 
@@ -2757,7 +2752,7 @@ static const MTK_TEST_SETTING s_default_mtk_test_setting =
 
 			.ac_limit = 100000ul,
 
-			.cr_val = 100000ul,
+			.cr_val = 50000ul,
 
 			.current_from = 100ul,
 
@@ -2818,7 +2813,7 @@ static const MTK_TEST_SETTING s_default_mtk_test_setting =
 
 			.ac_limit = 100000ul,
 
-			.cr_val = 100000ul,
+			.cr_val = 50000ul,
 
 			.current_from = 100ul,
 
@@ -2886,7 +2881,7 @@ static const MTK_TEST_SETTING s_default_mtk_test_setting =
 
 			.ac_limit = 100000ul,
 
-			.cr_val = 100000ul,
+			.cr_val = 50000ul,
 
 			.current_from = 100ul,
 
@@ -2947,7 +2942,7 @@ static const MTK_TEST_SETTING s_default_mtk_test_setting =
 
 			.ac_limit = 100000ul,
 
-			.cr_val = 100000ul,
+			.cr_val = 50000ul,
 
 			.current_from = 100ul,
 
@@ -3008,7 +3003,7 @@ static const MTK_TEST_SETTING s_default_mtk_test_setting =
 
 			.ac_limit = 100000ul,
 
-			.cr_val = 100000ul,
+			.cr_val = 50000ul,
 
 			.current_from = 100ul,
 
@@ -3069,7 +3064,7 @@ static const MTK_TEST_SETTING s_default_mtk_test_setting =
 
 			.ac_limit = 100000ul,
 
-			.cr_val = 100000ul,
+			.cr_val = 50000ul,
 
 			.current_from = 100ul,
 
@@ -3137,7 +3132,7 @@ static const MTK_TEST_SETTING s_default_mtk_test_setting =
 
 			.ac_limit = 100000ul,
 
-			.cr_val = 100000ul,
+			.cr_val = 50000ul,
 
 			.current_from = 100ul,
 
@@ -3198,7 +3193,7 @@ static const MTK_TEST_SETTING s_default_mtk_test_setting =
 
 			.ac_limit = 100000ul,
 
-			.cr_val = 100000ul,
+			.cr_val = 50000ul,
 
 			.current_from = 100ul,
 
@@ -3259,7 +3254,7 @@ static const MTK_TEST_SETTING s_default_mtk_test_setting =
 
 			.ac_limit = 100000ul,
 
-			.cr_val = 100000ul,
+			.cr_val = 50000ul,
 
 			.current_from = 100ul,
 
@@ -3320,7 +3315,7 @@ static const MTK_TEST_SETTING s_default_mtk_test_setting =
 
 			.ac_limit = 100000ul,
 
-			.cr_val = 100000ul,
+			.cr_val = 50000ul,
 
 			.current_from = 100ul,
 
@@ -3388,7 +3383,7 @@ static const MTK_TEST_SETTING s_default_mtk_test_setting =
 
 			.ac_limit = 100000ul,
 
-			.cr_val = 100000ul,
+			.cr_val = 50000ul,
 
 			.current_from = 100ul,
 
@@ -3449,7 +3444,7 @@ static const MTK_TEST_SETTING s_default_mtk_test_setting =
 
 			.ac_limit = 100000ul,
 
-			.cr_val = 100000ul,
+			.cr_val = 50000ul,
 
 			.current_from = 100ul,
 
@@ -3510,7 +3505,7 @@ static const MTK_TEST_SETTING s_default_mtk_test_setting =
 
 			.ac_limit = 100000ul,
 
-			.cr_val = 100000ul,
+			.cr_val = 50000ul,
 
 			.current_from = 100ul,
 
@@ -3571,7 +3566,7 @@ static const MTK_TEST_SETTING s_default_mtk_test_setting =
 
 			.ac_limit = 100000ul,
 
-			.cr_val = 100000ul,
+			.cr_val = 50000ul,
 
 			.current_from = 100ul,
 
@@ -3721,6 +3716,11 @@ static const PHONE_NUMBER_SETTING s_default_phone_number_setting =
 	.customer_phone_number_power_on_count = 0
 };
 
+static const PASSWORD s_default_password = 
+{
+	.password = { '1', '2', '3', '4', '5', '6' },
+};
+
 bool parameter_file_exist(void)
 {
 	int fd;
@@ -3761,7 +3761,15 @@ bool save_default_parameters(void)
 
 	uint32_t size = sizeof(PARAMETER);
 
-	uint32_t group = 0;
+	uint32_t default_cv_mode_voltage_set = 5000ul;
+	
+	uint32_t default_cc_mode_current_set = 300ul;
+
+	uint32_t default_cr_mode_resist_set = 50000ul;
+
+	TEST_CATEGORY cur_test_category = TEST_CATEGORY_SYNTH_TEST;
+	
+	uint32_t cur_test_group = 0;
 	
 	int i;
 	
@@ -3787,29 +3795,36 @@ bool save_default_parameters(void)
 	}
 
 	/* cv mode */
-	ret = write(fd, &s_default_cv_mode_voltage_set, sizeof(s_default_cv_mode_voltage_set));
-	if (ret != sizeof(s_default_cv_mode_voltage_set))
+	ret = write(fd, &default_cv_mode_voltage_set, sizeof(default_cv_mode_voltage_set));
+	if (ret != sizeof(default_cv_mode_voltage_set))
 	{
 		goto FAILED;
 	}
 
 	/* cc mode */
-	ret = write(fd, &s_default_cc_mode_current_set, sizeof(s_default_cc_mode_current_set));
-	if (ret != sizeof(s_default_cc_mode_current_set))
+	ret = write(fd, &default_cc_mode_current_set, sizeof(default_cc_mode_current_set));
+	if (ret != sizeof(default_cc_mode_current_set))
 	{
 		goto FAILED;
 	}
 
 	/* cr mode */
-	ret = write(fd, &s_default_cr_mode_resist_set, sizeof(s_default_cr_mode_resist_set));
-	if (ret != sizeof(s_default_cr_mode_resist_set))
+	ret = write(fd, &default_cr_mode_resist_set, sizeof(default_cr_mode_resist_set));
+	if (ret != sizeof(default_cr_mode_resist_set))
 	{
 		goto FAILED;
 	}
 
-	/* synth test gorup */
-	ret = write(fd, &group, sizeof(group));
-	if (ret != sizeof(group))
+	/* current test category */
+	ret = write(fd, &cur_test_category, sizeof(cur_test_category));
+	if (ret != sizeof(cur_test_category))
+	{
+		goto FAILED;
+	}
+	
+	/* current test group */
+	ret = write(fd, &cur_test_group, sizeof(cur_test_group));
+	if (ret != sizeof(cur_test_group))
 	{
 		goto FAILED;
 	}	
@@ -3823,13 +3838,6 @@ bool save_default_parameters(void)
 			goto FAILED;
 		}
 	}
-
-	/* qc2.0 test gorup */
-	ret = write(fd, &group, sizeof(group));
-	if (ret != sizeof(group))
-	{
-		goto FAILED;
-	}	
 	
 	/* qc2.0 test setting */
 	for (i = 0; i < QC_20_TEST_GROUP_COUNT; i++)
@@ -3840,13 +3848,6 @@ bool save_default_parameters(void)
 			goto FAILED;
 		}
 	}
-
-	/* mtk test gorup */
-	ret = write(fd, &group, sizeof(group));
-	if (ret != sizeof(group))
-	{
-		goto FAILED;
-	}	
 	
 	/* mtk test setting */
 	for (i = 0; i < MTK_TEST_GROUP_COUNT; i++)
@@ -3892,6 +3893,14 @@ bool save_default_parameters(void)
 	{
 		goto FAILED;
 	}
+
+	/* password */
+	ret = write(fd, &s_default_password, sizeof(s_default_password));
+	if (ret != sizeof(s_default_password))
+	{
+		goto FAILED;
+	}
+
 	
 	close(fd);
 

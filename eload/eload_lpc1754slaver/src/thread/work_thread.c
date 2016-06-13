@@ -51,6 +51,9 @@
 #define  TEST_FLAG_FAIL      0x00
 #define  TEST_FLAG_OK        0x01
 
+/* automatic test time limit */
+#define  AUTOMATIC_TEST_LIMIT   2000
+
 typedef struct 
 {
 	uint8_t test_type;
@@ -99,10 +102,10 @@ uint32_t adc_to_ac_val(uint32_t adc_val)
 	return (uint32_t)val;
 }
 
-
 /* PWM duty */
 static int32_t s_duty = 0;
 
+/* max PWM duty */
 static int32_t s_max_duty = 0;
 
 static void try_set_voltage(uint32_t mV)
@@ -153,6 +156,7 @@ static void adjust_voltage_current(uint32_t mV, uint32_t mA)
 			target_val = s_test_status.test_config.cv_test_config.voltage_val;
 		}
 
+		/*
 		if (mV < target_val)
 		{
 			s_duty++;
@@ -177,6 +181,7 @@ static void adjust_voltage_current(uint32_t mV, uint32_t mA)
 			
 			TRACE("voltage duty:%d\n", s_duty);
 		}
+		*/
 	}
 	else if (s_test_status.test_type == TEST_TYPE_CC_MODE || s_test_status.test_type == TEST_TYPE_CC_TEST)
 	{
@@ -249,70 +254,66 @@ static void adjust_voltage_current(uint32_t mV, uint32_t mA)
 	}
 
 	//TRACE("max duty:%d\n", control_get_max_duty());
-	//TRACE("duty:%d\n", s_duty);	
+	//TRACE("duty:%d\n", s_duty);
 }
 
 //qc 2.0 switch
-static void switch_to_qc_20_default_level(void)
-{
-	control_set_dp_drive_duty(0);
-	control_set_dn_drive_duty(0);
-}
-
 static void switch_to_qc_20_5v_level(void)
 {
-	int32_t duty = 700 * s_max_duty / VDD_REF;
-	control_set_dp_drive_duty(duty);
-	//control_set_dn_drive_duty(0);
-
-	//delay 1.5s
-	rt_thread_delay(rt_tick_from_millisecond(2000));
-
-	//give d+ 0V, d- 0V
 	control_set_dp_drive_duty(0);
+	
 	control_set_dn_drive_duty(0);
 }
 
 static void switch_to_qc_20_9v_level(void)
 {
 	int32_t duty = 700 * s_max_duty / VDD_REF;
+
 	control_set_dp_drive_duty(duty);
 	//control_set_dn_drive_duty(0);
 
 	//delay 1.5s
-	rt_thread_delay(rt_tick_from_millisecond(2000));
-
+	rt_thread_delay(rt_tick_from_millisecond(1500));
+	
 	//give d+ 3.3V, d- 0.6V
 	control_set_dp_drive_duty(s_max_duty);
 	control_set_dn_drive_duty(duty);
+
+	rt_thread_delay(rt_tick_from_millisecond(100));
 }
 
 static void switch_to_qc_20_12v_level(void)
 {
 	int32_t duty = 700 * s_max_duty / VDD_REF;
+
 	control_set_dp_drive_duty(duty);
 	//control_set_dn_drive_duty(0);
 
 	//delay 1.5s
-	rt_thread_delay(rt_tick_from_millisecond(2000));
+	rt_thread_delay(rt_tick_from_millisecond(1500));
 
 	//give d+ 0.6V, d- 0.6V
 	control_set_dp_drive_duty(duty);
 	control_set_dn_drive_duty(duty);
+
+	rt_thread_delay(rt_tick_from_millisecond(100));
 }
 
 static void switch_to_qc_20_20v_level(void)
 {
 	int32_t duty = 700 * s_max_duty / VDD_REF;
+
 	control_set_dp_drive_duty(duty);
 	//control_set_dn_drive_duty(0);
 
 	//delay 1.5s
-	rt_thread_delay(rt_tick_from_millisecond(2000));
+	rt_thread_delay(rt_tick_from_millisecond(1500));
 
 	//give d+ 3.3V, d- 3.3V
 	control_set_dp_drive_duty(s_max_duty);
 	control_set_dn_drive_duty(s_max_duty);
+
+	rt_thread_delay(rt_tick_from_millisecond(100));
 }
 
 static void switch_to_qc_20_voltage_level(uint8_t voltage_level)
@@ -344,6 +345,104 @@ static void switch_to_qc_20_voltage_level(uint8_t voltage_level)
 		
 		break;
 	}
+}
+
+static void mtk_voltage_increase_step(void)
+{
+	try_set_current(0);
+	rt_thread_delay(rt_tick_from_millisecond(100));
+	
+	//start
+	try_set_current(300);
+	rt_thread_delay(rt_tick_from_millisecond(100));
+
+	try_set_current(0);
+	rt_thread_delay(rt_tick_from_millisecond(100));
+
+	try_set_current(300);
+	rt_thread_delay(rt_tick_from_millisecond(100));
+
+	try_set_current(0);
+	rt_thread_delay(rt_tick_from_millisecond(100));
+
+	try_set_current(300);
+	rt_thread_delay(rt_tick_from_millisecond(300));
+
+	try_set_current(0);
+	rt_thread_delay(rt_tick_from_millisecond(100));
+
+	try_set_current(300);
+	rt_thread_delay(rt_tick_from_millisecond(300));
+
+	try_set_current(0);
+	rt_thread_delay(rt_tick_from_millisecond(100));
+
+	try_set_current(300);
+	rt_thread_delay(rt_tick_from_millisecond(300));
+
+	try_set_current(0);
+	rt_thread_delay(rt_tick_from_millisecond(100));
+
+	try_set_current(300);
+	rt_thread_delay(rt_tick_from_millisecond(500));
+
+	try_set_current(0);
+	rt_thread_delay(rt_tick_from_millisecond(100));
+
+	try_set_current(300);
+	rt_thread_delay(rt_tick_from_millisecond(100));
+}
+
+static void mtk_voltage_decrease_step(void)
+{
+	try_set_current(0);
+	rt_thread_delay(rt_tick_from_millisecond(100));
+	
+	//start
+	try_set_current(300);
+	rt_thread_delay(rt_tick_from_millisecond(300));
+
+	try_set_current(0);
+	rt_thread_delay(rt_tick_from_millisecond(100));
+
+	try_set_current(300);
+	rt_thread_delay(rt_tick_from_millisecond(300));
+
+	try_set_current(0);
+	rt_thread_delay(rt_tick_from_millisecond(100));
+
+	try_set_current(300);
+	rt_thread_delay(rt_tick_from_millisecond(300));
+
+	try_set_current(0);
+	rt_thread_delay(rt_tick_from_millisecond(100));
+
+	try_set_current(300);
+	rt_thread_delay(rt_tick_from_millisecond(100));
+
+	try_set_current(0);
+	rt_thread_delay(rt_tick_from_millisecond(100));
+
+	try_set_current(300);
+	rt_thread_delay(rt_tick_from_millisecond(100));
+
+	try_set_current(0);
+	rt_thread_delay(rt_tick_from_millisecond(100));
+
+	try_set_current(300);
+	rt_thread_delay(rt_tick_from_millisecond(500));
+
+	try_set_current(0);
+	rt_thread_delay(rt_tick_from_millisecond(100));
+
+	try_set_current(300);
+	rt_thread_delay(rt_tick_from_millisecond(100));
+}
+
+static void mtk_switch_to_default(void)
+{
+	try_set_current(0);
+	rt_thread_delay(rt_tick_from_millisecond(300));
 }
 
 //mtk switch
@@ -432,9 +531,9 @@ static void work_thread_entry(void *parameter)
 	
 	relay_load_off();
 
-	relay_ac_on();
-
 	relay_empty_off();
+	
+	relay_ac_off();
 	
 	sample_count = 0;
 
@@ -446,7 +545,7 @@ static void work_thread_entry(void *parameter)
 
 	last_test_category = TEST_CATEGORY_SYNTH;
 	
-	last_voltage_level = TEST_VOLTAGE_LEVEL_DEFAULT;
+	last_voltage_level = TEST_VOLTAGE_LEVEL_5V;
 	
 	while (RT_TRUE)
 	{	
@@ -482,7 +581,13 @@ static void work_thread_entry(void *parameter)
 					switch_to_channel(CV_CTRL_CHANNEL);
 				
 					control_set_current_duty(0);
-					
+
+					s_test_status.test_config.cv_mode_config = test_cmd.test_config.cv_mode_config;
+
+					try_set_voltage(s_test_status.test_config.cv_mode_config.voltage_val);
+	
+					switch_enable();
+
 					if (s_test_status.test_type == TEST_TYPE_NONE
 						|| s_test_status.test_type == TEST_TYPE_EMPTY_LOAD_TEST)
 					{
@@ -490,16 +595,11 @@ static void work_thread_entry(void *parameter)
 						TRACE("first cv mode\n");
 
 						relay_load_on();
+
+						relay_empty_on();
 						
 						rt_thread_delay(rt_tick_from_millisecond(RELAY_ON_DELAY));
 					}
-
-					s_test_status.test_config.cv_mode_config = test_cmd.test_config.cv_mode_config;
-
-					s_test_status.test_type     = TEST_TYPE_CV_MODE;
-					s_test_status.test_status   = TEST_STATUS_ON;
-					
-					try_set_voltage(s_test_status.test_config.cv_mode_config.voltage_val);
 
 					/* update content */
 					rt_sem_take(g_sem_test_content, RT_WAITING_FOREVER);
@@ -507,7 +607,8 @@ static void work_thread_entry(void *parameter)
 					g_test_content.test_status = TEST_STATUS_ON;
 					rt_sem_release(g_sem_test_content);
 					
-					switch_enable();
+					s_test_status.test_type     = TEST_TYPE_CV_MODE;
+					s_test_status.test_status   = TEST_STATUS_ON;
 				}
 				
 				sample_count = 0;
@@ -547,6 +648,8 @@ static void work_thread_entry(void *parameter)
 						TRACE("first cc mode\n");
 
 						relay_load_on();
+
+						relay_empty_on();
 						
 						rt_thread_delay(rt_tick_from_millisecond(RELAY_ON_DELAY));
 					}
@@ -604,6 +707,8 @@ static void work_thread_entry(void *parameter)
 						TRACE("first cr mode\n");
 
 						relay_load_on();
+
+						relay_empty_on();
 						
 						rt_thread_delay(rt_tick_from_millisecond(RELAY_ON_DELAY));
 					}
@@ -629,15 +734,23 @@ static void work_thread_entry(void *parameter)
 				break;
 
 			case TEST_TYPE_CV_TEST:
-				if (s_test_status.test_type == TEST_TYPE_CV_TEST)
+				if (s_test_status.test_type != TEST_TYPE_NONE
+						&& s_test_status.test_type != TEST_TYPE_EMPTY_LOAD_TEST)
 				{
-					TRACE("cv test continue\n");
+					TRACE("still relay on\n");
+
+					s_test_status.test_config.cv_test_config = test_cmd.test_config.cv_test_config;
 					
-					/* still cv test */
+					/* still relay on */
 					switch_disable();
 					switch_to_channel(CV_CTRL_CHANNEL);
-					
-					s_test_status.test_config.cv_test_config = test_cmd.test_config.cv_test_config;
+
+					if (s_test_status.test_config.cv_test_config.test_category != TEST_CATEGORY_SYNTH)
+					{
+						relay_load_off();
+						
+						rt_thread_delay(rt_tick_from_millisecond(RELAY_ON_DELAY));
+					}	
 
 					s_test_status.test_status  = TEST_STATUS_ON;
 
@@ -646,7 +759,7 @@ static void work_thread_entry(void *parameter)
 					g_test_content.test_type   = TEST_TYPE_CV_TEST;
 					g_test_content.test_status = TEST_STATUS_ON;
 					rt_sem_release(g_sem_test_content);
-
+					
 					if (s_test_status.test_config.cv_test_config.test_category == TEST_CATEGORY_QC_20)
 					{
 						last_test_category = TEST_CATEGORY_QC_20;
@@ -673,6 +786,13 @@ static void work_thread_entry(void *parameter)
 					try_set_voltage(s_test_status.test_config.cv_test_config.voltage_val);
 
 					switch_enable();
+
+					if (s_test_status.test_config.cv_test_config.test_category != TEST_CATEGORY_SYNTH)
+					{
+						relay_load_on();
+							
+						rt_thread_delay(rt_tick_from_millisecond(RELAY_ON_DELAY));
+					}
 				}
 				else
 				{
@@ -681,17 +801,6 @@ static void work_thread_entry(void *parameter)
 					switch_to_channel(CV_CTRL_CHANNEL);
 					
 					control_set_current_duty(0);
-
-					if (s_test_status.test_type == TEST_TYPE_NONE
-						|| s_test_status.test_type == TEST_TYPE_EMPTY_LOAD_TEST)
-					{
-						/* init status is no testing */
-						TRACE("first cv test\n");
-
-						relay_load_on();
-						
-						rt_thread_delay(rt_tick_from_millisecond(RELAY_ON_DELAY));
-					}
 					
 					s_test_status.test_config.cv_test_config = test_cmd.test_config.cv_test_config;
 
@@ -731,11 +840,25 @@ static void work_thread_entry(void *parameter)
 
 					/* assume relay is on */
 					switch_enable();
+
+					/* init status is no testing */
+					TRACE("first cv test\n");
+
+					relay_load_on();
+						
+					rt_thread_delay(rt_tick_from_millisecond(RELAY_ON_DELAY));
 				}
 
 				s_test_status.test_flag = TEST_FLAG_FAIL;
-				
-				next_tick = rt_tick_get() + rt_tick_from_millisecond(s_test_status.test_config.cv_test_config.duration);
+
+				if (s_test_status.test_config.cv_test_config.duration == AUTOMATIC_TIME)
+				{
+					next_tick = rt_tick_get() + rt_tick_from_millisecond(AUTOMATIC_TEST_LIMIT);
+				}
+				else
+				{
+					next_tick = rt_tick_get() + rt_tick_from_millisecond(s_test_status.test_config.cv_test_config.duration);
+				}
 				
 				sample_count = 0;
 				
@@ -802,6 +925,8 @@ static void work_thread_entry(void *parameter)
 						TRACE("first cc test\n");
 
 						relay_load_on();
+
+						relay_empty_on();
 						
 						rt_thread_delay(rt_tick_from_millisecond(RELAY_ON_DELAY));
 					}
@@ -847,8 +972,15 @@ static void work_thread_entry(void *parameter)
 				}
 
 				s_test_status.test_flag = TEST_FLAG_FAIL;
-				
-				next_tick = rt_tick_get() + rt_tick_from_millisecond(s_test_status.test_config.cc_test_config.duration);
+
+				if (s_test_status.test_config.cc_test_config.duration == AUTOMATIC_TIME)
+				{
+					next_tick = rt_tick_get() + rt_tick_from_millisecond(AUTOMATIC_TEST_LIMIT);
+				}
+				else
+				{
+					next_tick = rt_tick_get() + rt_tick_from_millisecond(s_test_status.test_config.cc_test_config.duration);
+				}
 				
 				sample_count = 0;
 				
@@ -915,6 +1047,8 @@ static void work_thread_entry(void *parameter)
 						TRACE("first cr test\n");
 
 						relay_load_on();
+
+						relay_empty_on();
 						
 						rt_thread_delay(rt_tick_from_millisecond(RELAY_ON_DELAY));
 					}
@@ -960,8 +1094,15 @@ static void work_thread_entry(void *parameter)
 				}
 
 				s_test_status.test_flag = TEST_FLAG_FAIL;
-				
-				next_tick = rt_tick_get() + rt_tick_from_millisecond(s_test_status.test_config.cr_test_config.duration);
+
+				if (s_test_status.test_config.cr_test_config.duration == AUTOMATIC_TIME)
+				{
+					next_tick = rt_tick_get() + rt_tick_from_millisecond(AUTOMATIC_TEST_LIMIT);
+				}
+				else
+				{
+					next_tick = rt_tick_get() + rt_tick_from_millisecond(s_test_status.test_config.cr_test_config.duration);
+				}
 				
 				sample_count = 0;
 				
@@ -1012,8 +1153,15 @@ static void work_thread_entry(void *parameter)
 					switch_enable();
 				}
 
-				next_tick = rt_tick_get() + rt_tick_from_millisecond(s_test_status.test_config.empty_load_test_config.duration);
-				
+				if (s_test_status.test_config.empty_load_test_config.duration == AUTOMATIC_TIME)
+				{
+					next_tick = rt_tick_get() + rt_tick_from_millisecond(AUTOMATIC_TEST_LIMIT);
+				}
+				else
+				{
+					next_tick = rt_tick_get() + rt_tick_from_millisecond(s_test_status.test_config.empty_load_test_config.duration);
+				}
+			
 				sample_count = 0;
 				
 				break;
@@ -1081,6 +1229,8 @@ static void work_thread_entry(void *parameter)
 						TRACE("first over current test\n");
 
 						relay_load_on();
+
+						relay_empty_on();
 						
 						rt_thread_delay(rt_tick_from_millisecond(RELAY_ON_DELAY));
 					}
@@ -1191,6 +1341,8 @@ static void work_thread_entry(void *parameter)
 						TRACE("first short test\n");
 
 						relay_load_on();
+
+						relay_empty_on();
 						
 						rt_thread_delay(rt_tick_from_millisecond(RELAY_ON_DELAY));
 					}
@@ -1233,8 +1385,15 @@ static void work_thread_entry(void *parameter)
 				}
 
 				s_test_status.test_flag = TEST_FLAG_FAIL;
-				
-				next_tick = rt_tick_get() + rt_tick_from_millisecond(s_test_status.test_config.short_test_config.duration);
+
+				if (s_test_status.test_config.short_test_config.duration == AUTOMATIC_TIME)
+				{
+					next_tick = rt_tick_get() + rt_tick_from_millisecond(AUTOMATIC_TEST_LIMIT);
+				}
+				else
+				{
+					next_tick = rt_tick_get() + rt_tick_from_millisecond(s_test_status.test_config.short_test_config.duration);
+				}
 				
 				sample_count = 0;
 				
@@ -1270,11 +1429,11 @@ static void work_thread_entry(void *parameter)
 						TRACE("first discharge test\n");
 
 						relay_load_on();
+
+						relay_empty_on();
 						
 						rt_thread_delay(rt_tick_from_millisecond(RELAY_ON_DELAY));
 					}
-
-					relay_ac_off();
 
 					s_test_status.test_config.discharge_test_config = test_cmd.test_config.discharge_test_config;
 
@@ -1321,9 +1480,9 @@ static void work_thread_entry(void *parameter)
 				if (last_test_category == TEST_CATEGORY_QC_20)
 				{
 					/* restore to default voltage level */
-					switch_to_qc_20_default_level();
+					switch_to_qc_20_5v_level();
 
-					last_voltage_level = TEST_VOLTAGE_LEVEL_DEFAULT;
+					last_voltage_level = TEST_VOLTAGE_LEVEL_5V;
 				}
 				else
 				{
@@ -1331,7 +1490,7 @@ static void work_thread_entry(void *parameter)
 				}
 				
 				s_test_status.test_type  = TEST_TYPE_NONE;
-				s_test_status.test_status  = TEST_STATUS_ON;
+				s_test_status.test_status  = TEST_STATUS_IDLE;
 				
 				sample_count = 0;
 				
@@ -1341,6 +1500,8 @@ static void work_thread_entry(void *parameter)
 				g_test_content.test_status = TEST_STATUS_IDLE;
 				rt_sem_release(g_sem_test_content);
 
+				relay_empty_off();
+				
 				relay_ac_on();
 				TRACE("turn on ac relay\n");
 				
@@ -1463,8 +1624,9 @@ static void work_thread_entry(void *parameter)
 			g_test_content.ac_current = ac;
 			rt_sem_release(g_sem_test_content);
 
-			TRACE("voltage:%d, current:%d, ac:%d\n", g_test_content.voltage, 
-						g_test_content.current, g_test_content.ac_current);
+			TRACE("type:%d, voltage:%d, current:%d, ac:%d, status:%d\n", g_test_content.test_type,
+						g_test_content.voltage, g_test_content.current, 
+						g_test_content.ac_current, g_test_content.test_status);
 						
 			adjust_voltage_current(voltage, current);
 
@@ -1473,26 +1635,12 @@ static void work_thread_entry(void *parameter)
 			{
 			case TEST_TYPE_CV_TEST:
 				if (g_test_content.test_status == TEST_STATUS_ON)
-				{	
-					if ((rt_tick_get() - next_tick) < RT_TICK_MAX / 2)
+				{
+					if (s_test_status.test_config.cv_test_config.duration == AUTOMATIC_TIME)
 					{
-						/* time is up, stop test */
-						if (s_test_status.test_flag == TEST_FLAG_OK)
+						if ((rt_tick_get() - next_tick) < RT_TICK_MAX / 2)
 						{
-							control_set_voltage_duty(0);
-							
-							switch_disable();
-							switch_to_channel(EMPTY_CTRL_CHANNEL);
-							switch_enable();
-
-							rt_sem_take(g_sem_test_content, RT_WAITING_FOREVER);
-							g_test_content.test_status = TEST_STATUS_IDLE;
-							rt_sem_release(g_sem_test_content);
-							
-							TRACE("cv test OK, stopped\n");
-						}
-						else
-						{
+							/* time is up */
 							control_set_voltage_duty(0);
 							
 							switch_disable();
@@ -1507,16 +1655,72 @@ static void work_thread_entry(void *parameter)
 							TRACE("current lower:%d, current upper:%d, ac upper:%d\n", s_test_status.test_config.cv_test_config.current_lower,
 										s_test_status.test_config.cv_test_config.current_upper, s_test_status.test_config.cv_test_config.ac_upper);
 						}
+						else
+						{
+							if (g_test_content.ac_current <= s_test_status.test_config.cv_test_config.ac_upper
+								&& g_test_content.current <= s_test_status.test_config.cv_test_config.current_upper
+								&& g_test_content.current >= s_test_status.test_config.cv_test_config.current_lower)
+							{
+								control_set_voltage_duty(0);
+							
+								switch_disable();
+								switch_to_channel(EMPTY_CTRL_CHANNEL);
+								switch_enable();
+
+								rt_sem_take(g_sem_test_content, RT_WAITING_FOREVER);
+								g_test_content.test_status = TEST_STATUS_NORMAL;
+								rt_sem_release(g_sem_test_content);
+								
+								TRACE("cv test OK, stopped\n");
+							}
+						}
 					}
 					else
 					{
-						if (g_test_content.ac_current <= s_test_status.test_config.cv_test_config.ac_upper
-							&& g_test_content.current <= s_test_status.test_config.cv_test_config.current_upper
-							&& g_test_content.current >= s_test_status.test_config.cv_test_config.current_lower)
+						if ((rt_tick_get() - next_tick) < RT_TICK_MAX / 2)
 						{
-							s_test_status.test_flag = TEST_FLAG_OK;
+							/* time is up, stop test */
+							if (s_test_status.test_flag == TEST_FLAG_OK)
+							{
+								control_set_voltage_duty(0);
+								
+								switch_disable();
+								switch_to_channel(EMPTY_CTRL_CHANNEL);
+								switch_enable();
+
+								rt_sem_take(g_sem_test_content, RT_WAITING_FOREVER);
+								g_test_content.test_status = TEST_STATUS_NORMAL;
+								rt_sem_release(g_sem_test_content);
+								
+								TRACE("cv test OK, stopped\n");
+							}
+							else
+							{
+								control_set_voltage_duty(0);
+								
+								switch_disable();
+								switch_to_channel(EMPTY_CTRL_CHANNEL);
+								switch_enable();
+
+								rt_sem_take(g_sem_test_content, RT_WAITING_FOREVER);
+								g_test_content.test_status = TEST_STATUS_ABNORMAL;
+								rt_sem_release(g_sem_test_content);
+
+								TRACE("cv test failed\n");
+								TRACE("current lower:%d, current upper:%d, ac upper:%d\n", s_test_status.test_config.cv_test_config.current_lower,
+											s_test_status.test_config.cv_test_config.current_upper, s_test_status.test_config.cv_test_config.ac_upper);
+							}
 						}
-					}
+						else
+						{
+							if (g_test_content.ac_current <= s_test_status.test_config.cv_test_config.ac_upper
+								&& g_test_content.current <= s_test_status.test_config.cv_test_config.current_upper
+								&& g_test_content.current >= s_test_status.test_config.cv_test_config.current_lower)
+							{
+								s_test_status.test_flag = TEST_FLAG_OK;
+							}
+						}
+					}	
 				}
 
 				break;
@@ -1524,25 +1728,11 @@ static void work_thread_entry(void *parameter)
 			case TEST_TYPE_CC_TEST:
 				if (g_test_content.test_status == TEST_STATUS_ON)
 				{
-					if ((rt_tick_get() - next_tick) < RT_TICK_MAX / 2)
+					if (s_test_status.test_config.cc_test_config.duration == AUTOMATIC_TIME)
 					{
-						/* time is up, stop test */
-						if (s_test_status.test_flag == TEST_FLAG_OK)
+						if ((rt_tick_get() - next_tick) < RT_TICK_MAX / 2)
 						{
-							control_set_current_duty(0);
-							
-							switch_disable();
-							switch_to_channel(EMPTY_CTRL_CHANNEL);
-							switch_enable();
-
-							rt_sem_take(g_sem_test_content, RT_WAITING_FOREVER);
-							g_test_content.test_status = TEST_STATUS_IDLE;
-							rt_sem_release(g_sem_test_content);
-
-							TRACE("cc test OK, stopped\n");
-						}
-						else
-						{
+							/* time is up */
 							control_set_current_duty(0);
 							
 							switch_disable();
@@ -1557,15 +1747,70 @@ static void work_thread_entry(void *parameter)
 							TRACE("voltage lower:%d, voltage upper:%d, ac upper:%d\n", s_test_status.test_config.cc_test_config.voltage_lower,
 										s_test_status.test_config.cc_test_config.voltage_upper, s_test_status.test_config.cc_test_config.ac_upper);
 						}
-						
-					}
-					else
-					{
-						if (g_test_content.ac_current <= s_test_status.test_config.cc_test_config.ac_upper
+						else
+						{
+							if (g_test_content.ac_current <= s_test_status.test_config.cc_test_config.ac_upper
 							&& g_test_content.voltage <= s_test_status.test_config.cc_test_config.voltage_upper
 							&& g_test_content.voltage >= s_test_status.test_config.cc_test_config.voltage_lower)
+							{
+								control_set_current_duty(0);
+							
+								switch_disable();
+								switch_to_channel(EMPTY_CTRL_CHANNEL);
+								switch_enable();
+
+								rt_sem_take(g_sem_test_content, RT_WAITING_FOREVER);
+								g_test_content.test_status = TEST_STATUS_NORMAL;
+								rt_sem_release(g_sem_test_content);
+
+								TRACE("cc test OK, stopped\n");		
+							}
+						}
+					}
+					else
+					{		
+						if ((rt_tick_get() - next_tick) < RT_TICK_MAX / 2)
 						{
-							s_test_status.test_flag = TEST_FLAG_OK;			
+							/* time is up, stop test */
+							if (s_test_status.test_flag == TEST_FLAG_OK)
+							{
+								control_set_current_duty(0);
+								
+								switch_disable();
+								switch_to_channel(EMPTY_CTRL_CHANNEL);
+								switch_enable();
+
+								rt_sem_take(g_sem_test_content, RT_WAITING_FOREVER);
+								g_test_content.test_status = TEST_STATUS_NORMAL;
+								rt_sem_release(g_sem_test_content);
+
+								TRACE("cc test OK, stopped\n");
+							}
+							else
+							{
+								control_set_current_duty(0);
+								
+								switch_disable();
+								switch_to_channel(EMPTY_CTRL_CHANNEL);
+								switch_enable();
+
+								rt_sem_take(g_sem_test_content, RT_WAITING_FOREVER);
+								g_test_content.test_status = TEST_STATUS_ABNORMAL;
+								rt_sem_release(g_sem_test_content);
+
+								TRACE("cc test failed\n");
+								TRACE("voltage lower:%d, voltage upper:%d, ac upper:%d\n", s_test_status.test_config.cc_test_config.voltage_lower,
+											s_test_status.test_config.cc_test_config.voltage_upper, s_test_status.test_config.cc_test_config.ac_upper);
+							}
+						}
+						else
+						{
+							if (g_test_content.ac_current <= s_test_status.test_config.cc_test_config.ac_upper
+								&& g_test_content.voltage <= s_test_status.test_config.cc_test_config.voltage_upper
+								&& g_test_content.voltage >= s_test_status.test_config.cc_test_config.voltage_lower)
+							{
+								s_test_status.test_flag = TEST_FLAG_OK;			
+							}
 						}
 					}
 				}
@@ -1575,27 +1820,13 @@ static void work_thread_entry(void *parameter)
 			case TEST_TYPE_CR_TEST:
 				if (g_test_content.test_status == TEST_STATUS_ON)
 				{
-					if ((rt_tick_get() - next_tick) < RT_TICK_MAX / 2)
+					if (s_test_status.test_config.cr_test_config.duration == AUTOMATIC_TIME)
 					{
-						/* time is up, stop test */
-						if (s_test_status.test_flag == TEST_FLAG_OK)
+						if ((rt_tick_get() - next_tick) < RT_TICK_MAX / 2)
 						{
+							/* time is up, stop test */
 							control_set_current_duty(0);
-							
-							switch_disable();
-							switch_to_channel(EMPTY_CTRL_CHANNEL);
-							switch_enable();
-
-							rt_sem_take(g_sem_test_content, RT_WAITING_FOREVER);
-							g_test_content.test_status = TEST_STATUS_IDLE;
-							rt_sem_release(g_sem_test_content);
-
-							TRACE("cr test OK, stopped\n");
-						}
-						else
-						{
-							control_set_current_duty(0);
-							
+								
 							switch_disable();
 							switch_to_channel(EMPTY_CTRL_CHANNEL);
 							switch_enable();
@@ -1606,53 +1837,148 @@ static void work_thread_entry(void *parameter)
 
 							TRACE("cr test failed\n");
 							TRACE("voltage lower:%d, voltage upper:%d, current lower:%d, current upper:%d, ac upper:%d\n", 
-								s_test_status.test_config.cr_test_config.voltage_lower, s_test_status.test_config.cr_test_config.voltage_upper, 
-								s_test_status.test_config.cr_test_config.current_lower, s_test_status.test_config.cr_test_config.current_upper,
-								s_test_status.test_config.cr_test_config.ac_upper);
+									s_test_status.test_config.cr_test_config.voltage_lower, s_test_status.test_config.cr_test_config.voltage_upper, 
+									s_test_status.test_config.cr_test_config.current_lower, s_test_status.test_config.cr_test_config.current_upper,
+									s_test_status.test_config.cr_test_config.ac_upper);
+						}
+						else
+						{
+							if (g_test_content.ac_current <= s_test_status.test_config.cr_test_config.ac_upper
+								&& g_test_content.voltage <= s_test_status.test_config.cr_test_config.voltage_upper
+								&& g_test_content.voltage >= s_test_status.test_config.cr_test_config.voltage_lower
+								&& g_test_content.current <= s_test_status.test_config.cr_test_config.current_upper
+								&& g_test_content.current >= s_test_status.test_config.cr_test_config.current_lower)
+							{
+								control_set_current_duty(0);
+								
+								switch_disable();
+								switch_to_channel(EMPTY_CTRL_CHANNEL);
+								switch_enable();
+
+								rt_sem_take(g_sem_test_content, RT_WAITING_FOREVER);
+								g_test_content.test_status = TEST_STATUS_NORMAL;
+								rt_sem_release(g_sem_test_content);
+
+								TRACE("cr test OK, stopped\n");
+							}
 						}
 					}
 					else
 					{
-						if (g_test_content.ac_current <= s_test_status.test_config.cr_test_config.ac_upper
-							&& g_test_content.voltage <= s_test_status.test_config.cr_test_config.voltage_upper
-							&& g_test_content.voltage >= s_test_status.test_config.cr_test_config.voltage_lower
-							&& g_test_content.current <= s_test_status.test_config.cr_test_config.current_upper
-							&& g_test_content.current >= s_test_status.test_config.cr_test_config.current_lower)
+						if ((rt_tick_get() - next_tick) < RT_TICK_MAX / 2)
 						{
-							s_test_status.test_flag = TEST_FLAG_OK;
+							/* time is up, stop test */
+							if (s_test_status.test_flag == TEST_FLAG_OK)
+							{
+								control_set_current_duty(0);
+									
+								switch_disable();
+								switch_to_channel(EMPTY_CTRL_CHANNEL);
+								switch_enable();
+
+								rt_sem_take(g_sem_test_content, RT_WAITING_FOREVER);
+								g_test_content.test_status = TEST_STATUS_NORMAL;
+								rt_sem_release(g_sem_test_content);
+
+								TRACE("cr test OK, stopped\n");
+							}
+							else
+							{
+								control_set_current_duty(0);
+									
+								switch_disable();
+								switch_to_channel(EMPTY_CTRL_CHANNEL);
+								switch_enable();
+
+								rt_sem_take(g_sem_test_content, RT_WAITING_FOREVER);
+								g_test_content.test_status = TEST_STATUS_ABNORMAL;
+								rt_sem_release(g_sem_test_content);
+
+								TRACE("cr test failed\n");
+								TRACE("voltage lower:%d, voltage upper:%d, current lower:%d, current upper:%d, ac upper:%d\n", 
+										s_test_status.test_config.cr_test_config.voltage_lower, s_test_status.test_config.cr_test_config.voltage_upper, 
+										s_test_status.test_config.cr_test_config.current_lower, s_test_status.test_config.cr_test_config.current_upper,
+										s_test_status.test_config.cr_test_config.ac_upper);
+							}
+						}
+						else
+						{
+							if (g_test_content.ac_current <= s_test_status.test_config.cr_test_config.ac_upper
+								&& g_test_content.voltage <= s_test_status.test_config.cr_test_config.voltage_upper
+								&& g_test_content.voltage >= s_test_status.test_config.cr_test_config.voltage_lower
+								&& g_test_content.current <= s_test_status.test_config.cr_test_config.current_upper
+								&& g_test_content.current >= s_test_status.test_config.cr_test_config.current_lower)
+							{
+								s_test_status.test_flag = TEST_FLAG_OK;
+							}
 						}
 					}
 				}
-
+				
 				break;
 				
 			case TEST_TYPE_EMPTY_LOAD_TEST:
-				relay_empty_on();
-				
 				if (g_test_content.test_status == TEST_STATUS_ON)
 				{
-					if ((rt_tick_get() - next_tick) < RT_TICK_MAX / 2)
+					if (s_test_status.test_config.empty_load_test_config.duration == AUTOMATIC_TIME)
 					{
-						/* time is up, stop test */
-						rt_sem_take(g_sem_test_content, RT_WAITING_FOREVER);
-						g_test_content.test_status = TEST_STATUS_IDLE;
-						rt_sem_release(g_sem_test_content);
-
-						TRACE("empty load test OK, stopped\n");
-					}
-					else
-					{
-						if (g_test_content.ac_current > s_test_status.test_config.empty_load_test_config.ac_upper
-							|| g_test_content.voltage > s_test_status.test_config.empty_load_test_config.voltage_upper
-							|| g_test_content.voltage < s_test_status.test_config.empty_load_test_config.voltage_lower)
+						if ((rt_tick_get() - next_tick) < RT_TICK_MAX / 2)
 						{
+							/* time is up, stop test */
 							rt_sem_take(g_sem_test_content, RT_WAITING_FOREVER);
 							g_test_content.test_status = TEST_STATUS_ABNORMAL;
 							rt_sem_release(g_sem_test_content);
-						
+							
 							TRACE("empty load test failed\n");
 							TRACE("voltage lower:%d, voltage upper:%d, ac upper:%d\n", s_test_status.test_config.empty_load_test_config.voltage_lower,
 										s_test_status.test_config.empty_load_test_config.voltage_upper, s_test_status.test_config.empty_load_test_config.ac_upper);
+						}
+						else 
+						{
+							if (g_test_content.ac_current <= s_test_status.test_config.empty_load_test_config.ac_upper
+								&& g_test_content.voltage <= s_test_status.test_config.empty_load_test_config.voltage_upper
+								&& g_test_content.voltage >= s_test_status.test_config.empty_load_test_config.voltage_lower)
+							{
+								rt_sem_take(g_sem_test_content, RT_WAITING_FOREVER);
+								g_test_content.test_status = TEST_STATUS_NORMAL;
+								rt_sem_release(g_sem_test_content);
+								
+								TRACE("empty load test OK, stopped\n");
+							}
+						}
+					}
+					else
+					{
+						if ((rt_tick_get() - next_tick) < RT_TICK_MAX / 2)
+						{
+							/* time is up, stop test */
+							if (s_test_status.test_flag == TEST_FLAG_OK)
+							{
+								rt_sem_take(g_sem_test_content, RT_WAITING_FOREVER);
+								g_test_content.test_status = TEST_STATUS_NORMAL;
+								rt_sem_release(g_sem_test_content);
+								
+								TRACE("empty load test OK, stopped\n");
+							}
+							else
+							{
+								rt_sem_take(g_sem_test_content, RT_WAITING_FOREVER);
+								g_test_content.test_status = TEST_STATUS_ABNORMAL;
+								rt_sem_release(g_sem_test_content);
+								
+								TRACE("empty load test failed\n");
+								TRACE("voltage lower:%d, voltage upper:%d, ac upper:%d\n", s_test_status.test_config.empty_load_test_config.voltage_lower,
+											s_test_status.test_config.empty_load_test_config.voltage_upper, s_test_status.test_config.empty_load_test_config.ac_upper);
+							}	
+						}
+						else
+						{
+							if (g_test_content.ac_current <= s_test_status.test_config.empty_load_test_config.ac_upper
+									&& g_test_content.voltage <= s_test_status.test_config.empty_load_test_config.voltage_upper
+									&& g_test_content.voltage >= s_test_status.test_config.empty_load_test_config.voltage_lower)
+							{
+								s_test_status.test_flag = TEST_FLAG_OK;
+							}
 						}
 					}
 				}
@@ -1706,7 +2032,7 @@ static void work_thread_entry(void *parameter)
 									switch_enable();
 
 									rt_sem_take(g_sem_test_content, RT_WAITING_FOREVER);
-									g_test_content.test_status = TEST_STATUS_IDLE;
+									g_test_content.test_status = TEST_STATUS_NORMAL;
 									rt_sem_release(g_sem_test_content);
 
 									TRACE("over current test ok, current:%d, upper current:%d\n",
@@ -1768,7 +2094,7 @@ static void work_thread_entry(void *parameter)
 								switch_enable();
 
 								rt_sem_take(g_sem_test_content, RT_WAITING_FOREVER);
-								g_test_content.test_status = TEST_STATUS_IDLE;
+								g_test_content.test_status = TEST_STATUS_NORMAL;
 								rt_sem_release(g_sem_test_content);
 								
 
@@ -1807,25 +2133,11 @@ static void work_thread_entry(void *parameter)
 			case TEST_TYPE_SHORT_TEST:
 				if (g_test_content.test_status == TEST_STATUS_ON)
 				{
-					if ((rt_tick_get() - next_tick) < RT_TICK_MAX / 2)
+					if (s_test_status.test_config.short_test_config.duration == AUTOMATIC_TIME)
 					{
-						/* time is up, stop test */
-						if (s_test_status.test_flag == TEST_FLAG_OK)
+						if ((rt_tick_get() - next_tick) < RT_TICK_MAX / 2)
 						{
-							control_set_current_duty(0);
-							
-							switch_disable();
-							switch_to_channel(EMPTY_CTRL_CHANNEL);
-							switch_enable();
-
-							rt_sem_take(g_sem_test_content, RT_WAITING_FOREVER);
-							g_test_content.test_status = TEST_STATUS_IDLE;
-							rt_sem_release(g_sem_test_content);
-
-							TRACE("short test OK, stopped\n");
-						}
-						else
-						{
+							/* time is up, stop test */
 							control_set_current_duty(0);
 							
 							switch_disable();
@@ -1838,17 +2150,72 @@ static void work_thread_entry(void *parameter)
 
 							TRACE("short test failed. ac:%d, upper ac:%d, current:%d, upper current:%d\n", 
 									g_test_content.ac_current, s_test_status.test_config.over_current_test_config.ac_upper,
-									g_test_content.current, s_test_status.test_config.short_test_config.current_upper);
+									g_test_content.current, s_test_status.test_config.short_test_config.current_upper);			
+						}
+						else
+						{
+							if (g_test_content.ac_current <= s_test_status.test_config.short_test_config.ac_upper
+								&& g_test_content.current <= s_test_status.test_config.short_test_config.current_upper)
+							{
+								control_set_current_duty(0);
+							
+								switch_disable();
+								switch_to_channel(EMPTY_CTRL_CHANNEL);
+								switch_enable();
+
+								rt_sem_take(g_sem_test_content, RT_WAITING_FOREVER);
+								g_test_content.test_status = TEST_STATUS_NORMAL;
+								rt_sem_release(g_sem_test_content);
+
+								TRACE("short test OK, stopped\n");			
+							}
 						}
 					}
 					else
 					{
-						if (g_test_content.ac_current <= s_test_status.test_config.short_test_config.ac_upper
-							&& g_test_content.current <= s_test_status.test_config.short_test_config.current_upper)
+						if ((rt_tick_get() - next_tick) < RT_TICK_MAX / 2)
 						{
-							s_test_status.test_flag = TEST_FLAG_OK;			
+							/* time is up, stop test */
+							if (s_test_status.test_flag == TEST_FLAG_OK)
+							{
+								control_set_current_duty(0);
+								
+								switch_disable();
+								switch_to_channel(EMPTY_CTRL_CHANNEL);
+								switch_enable();
+
+								rt_sem_take(g_sem_test_content, RT_WAITING_FOREVER);
+								g_test_content.test_status = TEST_STATUS_NORMAL;
+								rt_sem_release(g_sem_test_content);
+
+								TRACE("short test OK, stopped\n");
+							}
+							else
+							{
+								control_set_current_duty(0);
+								
+								switch_disable();
+								switch_to_channel(EMPTY_CTRL_CHANNEL);
+								switch_enable();
+
+								rt_sem_take(g_sem_test_content, RT_WAITING_FOREVER);
+								g_test_content.test_status = TEST_STATUS_ABNORMAL;
+								rt_sem_release(g_sem_test_content);
+
+								TRACE("short test failed. ac:%d, upper ac:%d, current:%d, upper current:%d\n", 
+										g_test_content.ac_current, s_test_status.test_config.over_current_test_config.ac_upper,
+										g_test_content.current, s_test_status.test_config.short_test_config.current_upper);
+							}
 						}
-					}
+						else
+						{
+							if (g_test_content.ac_current <= s_test_status.test_config.short_test_config.ac_upper
+								&& g_test_content.current <= s_test_status.test_config.short_test_config.current_upper)
+							{
+								s_test_status.test_flag = TEST_FLAG_OK;			
+							}
+						}
+					}	
 				}
 
 				break;
@@ -1867,8 +2234,10 @@ static void work_thread_entry(void *parameter)
 
 						relay_load_off();
 
+						relay_empty_off();
+
 						rt_sem_take(g_sem_test_content, RT_WAITING_FOREVER);
-						g_test_content.test_status = TEST_STATUS_IDLE;
+						g_test_content.test_status = TEST_STATUS_NORMAL;
 						rt_sem_release(g_sem_test_content);
 							
 						TRACE("discharge test stopped\n");

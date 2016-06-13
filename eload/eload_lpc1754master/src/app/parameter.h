@@ -498,6 +498,13 @@ typedef struct
 	uint16_t      customer_phone_number_power_on_count;	
 } __attribute__ ((packed)) PHONE_NUMBER_SETTING;
 
+#define PASSWORD_LEN         6
+
+typedef struct
+{
+	char password[PASSWORD_LEN];
+} __attribute__ ((packed)) PASSWORD;
+
 #define  PARAM_FILE_HEADER     0xDEADBEEF
 
 typedef struct
@@ -506,13 +513,14 @@ typedef struct
 	uint32_t   cc_mode_current_set;  /* mA */
 	uint32_t   cr_mode_resist_set;   /* mO */
 
-	uint32_t   synth_test_group;
+	TEST_CATEGORY  cur_test_category; /* current test category */
+
+	uint32_t       cur_test_group;  /* current test group */
+	
 	SYNTH_TEST_SETTING  synth_test_setting[SYNTH_TEST_GROUP_COUNT];
 
-	uint32_t   qc_20_test_group;
 	QC_20_TEST_SETTING qc_20_test_setting[QC_20_TEST_GROUP_COUNT];
 
-	uint32_t   mtk_test_group;
 	MTK_TEST_SETTING mtk_test_setting[MTK_TEST_GROUP_COUNT];
 	
 	OPTION_ON_OFF  channel_set[CHANNEL_COUNT];
@@ -524,6 +532,8 @@ typedef struct
 	LIFE_LIMIT    life_limit;
 	
 	PHONE_NUMBER_SETTING phone_number_setting;
+
+	PASSWORD    password;
 } __attribute__ ((packed)) PARAMETER;
 
 typedef struct 

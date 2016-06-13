@@ -344,7 +344,7 @@
           </ArmAdsMisc>
           <Cads>
             <interw>1</interw>
-            <Optim>1</Optim>
+            <Optim>2</Optim>
             <oTime>0</oTime>
             <SplitLS>0</SplitLS>
             <OneElfS>0</OneElfS>
@@ -1124,6 +1124,16 @@
               <FileName>menu_channel_setting.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\menu\menu_channel_setting.c</FilePath>
+            </File>
+            <File>
+              <FileName>menu_password_setting.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\menu\menu_password_setting.c</FilePath>
+            </File>
+            <File>
+              <FileName>menu_password.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\menu\menu_password.c</FilePath>
             </File>
           </Files>
         </Group>
